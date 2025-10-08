@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exam Schedule</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "system-ui", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-50 min-h-screen font-sans">
+    <div class="max-w-6xl mx-auto p-6 md:p-8">
+      <!-- Header with Navigation -->
+      <div class="mb-8">
+        <div class="flex items-center mb-4">
+          <button
+            onclick="goBack()"
+            class="mr-4 p-2 hover:bg-white rounded-lg transition-colors border border-gray-200"
+          >
+            <svg
+              class="w-5 h-5 text-gray-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              ></path>
+            </svg>
+          </button>
+          <div class="flex-1">
+            <!-- Breadcrumb -->
+            <div class="flex items-center text-sm text-gray-500 mb-2">
+              <span class="hover:text-gray-900 cursor-pointer">Dashboard</span>
+              <svg
+                class="w-4 h-4 mx-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                ></path>
+              </svg>
+              <span class="hover:text-gray-900 cursor-pointer">Exam Hub</span>
+              <svg
+                class="w-4 h-4 mx-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                ></path>
+              </svg>
+              <span class="text-gray-900 font-medium">Schedule</span>
+            </div>
+            <h1 class="text-2xl font-semibold text-gray-900">Exam Schedule</h1>
+            <div class="w-12 h-1 bg-blue-500 rounded-full mt-2"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters and Sort Section -->
+      <div
+        class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6"
+      >
+        <div
+          class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4"
+        >
+          <!-- Filter Options -->
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="text-sm font-medium text-gray-700">Filter:</span>
+            <button
+              onclick="filterExams('all')"
+              id="filter-all"
+              class="filter-btn active px-4 py-2 text-sm font-medium rounded-lg bg-blue-50 text-blue-600 border border-blue-200 hover:bg-blue-100 transition-colors"
+            >
+              All
+            </button>
+            <button
+              onclick="filterExams('upcoming')"
+              id="filter-upcoming"
+              class="filter-btn px-4 py-2 text-sm font-medium rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+            >
+              Upcoming
+            </button>
+            <button
+              onclick="filterExams('completed')"
+              id="filter-completed"
+              class="filter-btn px-4 py-2 text-sm font-medium rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+            >
+              Completed
+            </button>
+            <button
+              onclick="filterExams('graded')"
+              id="filter-graded"
+              class="filter-btn px-4 py-2 text-sm font-medium rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+            >
+              Graded
+            </button>
+          </div>
+
+          <!-- Sort Options -->
+          <div class="flex items-center gap-3">
+            <span class="text-sm font-medium text-gray-700">Sort by:</span>
+            <select
+              id="sortSelect"
+              onchange="sortExams()"
+              class="px-4 py-2 text-sm font-medium rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+            >
+              <option value="date">Date</option>
+              <option value="subject">Subject</option>
+              <option value="status">Status</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Subject Filter (Dropdown) -->
+        <div class="mt-4 pt-4 border-t border-gray-100">
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="text-sm font-medium text-gray-700">Subject:</span>
+            <button
+              onclick="filterSubject('all')"
+              id="subject-all"
+              class="subject-btn active px-3 py-1.5 text-xs font-medium rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors"
+            >
+              All Subjects
+            </button>
+            <button
+              onclick="filterSubject('mathematics')"
+              id="subject-mathematics"
+              class="subject-btn px-3 py-1.5 text-xs font-medium rounded-full bg-purple-50 text-purple-600 hover:bg-purple-100 transition-colors"
+            >
+              Mathematics
+            </button>
+            <button
+              onclick="filterSubject('science')"
+              id="subject-science"
+              class="subject-btn px-3 py-1.5 text-xs font-medium rounded-full bg-green-50 text-green-600 hover:bg-green-100 transition-colors"
+            >
+              Science
+            </button>
+            <button
+              onclick="filterSubject('languages')"
+              id="subject-languages"
+              class="subject-btn px-3 py-1.5 text-xs font-medium rounded-full bg-pink-50 text-pink-600 hover:bg-pink-100 transition-colors"
+            >
+              Languages
+            </button>
+            <button
+              onclick="filterSubject('history')"
+              id="subject-history"
+              class="subject-btn px-3 py-1.5 text-xs font-medium rounded-full bg-indigo-50 text-indigo-600 hover:bg-indigo-100 transition-colors"
+            >
+              History
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exam Count -->
+      <div class="mb-4">
+        <p class="text-sm text-gray-600">
+          Showing
+          <span id="examCount" class="font-semibold text-gray-900">15</span>
+          exams
+        </p>
+      </div>
+
+      <!-- Exam List -->
+      <div id="examList" class="space-y-4">
+        <!-- Exam Item 1 - Upcoming -->
+        <div
+          class="exam-item bg-white p-6 rounded-xl border border-gray-200 hover:shadow-md hover:border-blue-200 transition-all"
+          data-status="upcoming"
+          data-subject="mathematics"
+          data-date="2025-10-12"
+        >
+          <div class="flex flex-col lg:flex-row lg:items-center gap-4">
+            <!-- Subject Icon -->
+            <div
+              class="w-16 h-16 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0"
+            >
+              <svg
+                class="w-8 h-8 text-purple-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                ></path>
+              </svg>
+            </div>
+
+            <!-- Exam Details -->
+            <div class="flex-1">
+              <div
+                class="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-2"
+              >
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-900 mb-1">
+                    Mid-Term Mathematics Exam
+                  </h3>
+                  <div class="flex items-center gap-2">
+                    <span
+                      class="px-3 py-1 bg-purple-50 text-purple-600 text-xs font-medium rounded-full"
+                      >Mathematics</span
+                    >
+                    <span
+                      class="px-3 py-1 bg-orange-50 text-orange-600 text-sm font-medium rounded-full"
+                      >Due Soon</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3">
+                <div class="flex items-center text-sm text-gray-600">
+                  <svg
+                    class="w-4 h-4 mr-2 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    ></path>
+                  </svg>
+                  <span class="font-medium">Oct 12, 2025</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                  <svg
+                    class="w-4 h-4 mr-2 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                  <span>09:00 - 11:00 AM</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                  <svg
+                    class="w-4 h-4 mr-2 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    ></path>
+                  </svg>
+                  <span>120 minutes</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                  <svg
+                    class="w-4 h-4 mr-2 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    ></path>
+                  </svg>
+                  <span>50 Questions</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Button -->
+            <div class="flex flex-col gap-2 lg:items-end">
+              <button
+                onclick="viewDetails('math-midterm')"
+                class="px-6 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                View Details
+              </button>
+              <span class="text-xs text-gray-500">In 4 days</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Exam Item 2 - In Progress -->
+        <div
+          class="exam-item bg-white p-6 rounded-xl border border-gray-200 hover:shadow-md hover:border-green-200 transition-all"
+          data-status="in-progress"
+          data-subject="science"
+          data-date="2025-10-08"
+        >
+          <div class="flex flex-col lg:flex-row lg:items-center gap-4">
+            <div
+              class="w-16 h-16 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 animate-pulse"
+            >
+              <svg
+                class="w-8 h-8 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
+                ></path>
+              </svg>
+            </div>
+
+            <div class="flex-1">
+              <div
+                class="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-2"
+              >
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-900 mb-1">
+                    Physics Practical Exam
+                  </h3>
+                  <div class="flex items-center gap-2">
+                    <span
+                      class="px-3 py-1 bg-green-50 text-green-600 text-xs font-medium rounded-full"
+                      >Science</span
+                    >
+                    <span
+                      class="px-3 py-1 bg-green-500 text-white text-sm font-medium rounded-full"
+                      >In Progress</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3">
+                <div class="flex items-center text-sm text-gray-600">
+                  <svg
+                    class="w-4 h-4 mr-2 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    ></path>
+                  </svg>
+                  <span class="font-medium">Today</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                  <svg
+                    class="w-4 h-4 mr-2 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                  <span>10:00 AM - 12:00 PM</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                  <svg
+                    class="w-4 h-4 mr-2 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    ></path>
+                  </svg>
+                  <span>120 minutes</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                  <svg
+                    class="w-4 h-4 mr-2 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    ></path>
+                  </svg>
+                  <span>Practical</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-2 lg:items-end">
+              <button
+                onclick="takeExam('physics-practical')"
+                class="px-6 py-2.5 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
+              >
+                Take Exam
+              </button>
+              <span class="text-xs text-green-600 font-medium"
+                >Available now</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Exam Item 3 - Completed -->
+        <div
+          class="exam-item bg-white p-6 rounded-xl border border-gray-200 hover:shadow-md hover:border-gray-300 transition-all"
+          data-status="completed"
+          data-subject="history"
+          data-date="2025-09-28"
+        >
+          <div class="flex flex-col lg:flex-row lg:items-center gap-4">
+            <div
+              class="w-16 h-16 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0"
+            >
+              <svg
+                class="w-8 h-8 text-indigo-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                ></path>
+              </svg>
+            </div>
+
+            <div class="flex-1">
+              <div
+                class="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-2"
+              >
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-900 mb-1">
+                    History Final Exam
+                  </h3>
+                  <div class="flex items-center gap-2">
+                    <span
+                      class="px-3 py-1 bg-indigo-50 text-indigo-600 text-xs font-medium rounded-full"
+                      >History</span
+                    >
+                    <span
+                      class="px-3 py-1 bg-gray-200 text-gray-700 text-sm font-medium rounded-full"
+                      >Completed</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3">
+                <div class="flex items-center text-sm text-gray-600">
+                  <svg
+                    class="w-4 h-4 mr-2 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    ></path>
+                  </svg>
+                  <span class="font-medium">Sept 28, 2025</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                  <svg
+                    class="w-4 h-4 mr-2 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                  <span>01:00 - 03:00 PM</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                  <svg
+                    class="w-4 h-4 mr-2 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    ></path>
+                  </svg>
+                  <span>120 minutes</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                  <svg
+                    class="w-4 h-4 mr-2 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    ></path>
+                  </svg>
+                  <span>40 Questions</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-2 lg:items-end">
+              <button
+                onclick="viewDetails('history-final')"
+                class="px-6 py-2.5 bg-gray-600 text-white text-sm font-medium rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                View Details
+              </button>
+              <span class="text-xs text-gray-500">10 days ago</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Exam Item 4 - Graded -->
+        <div
+          class="exam-item bg-white p-6 rounded-xl border border-gray-200 hover:shadow-md hover:border-green-200 transition-all"
+          data-status="graded"
+          data-subject="languages"
+          data-date="2025-09-25"
+        >
+          <div class="flex flex-col lg:flex-row lg:items-center gap-4">
+            <div
+              class="w-16 h-16 bg-pink-100 rounded-lg flex items-center justify-center flex-shrink-0"
+            >
+              <svg
+                class="w-8 h-8 text-pink-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                ></path>
+              </svg>
+            </div>
+
+            <div class="flex-1">
+              <div
+                class="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-2"
+              >
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-900 mb-1">
+                    English Literature Test
+                  </h3>
+                  <div class="flex items-center gap-2">
+                    <span
+                      class="px-3 py-1 bg-pink-50 text-pink-600 text-xs font-medium rounded-full"
+                      >Languages</span
+                    >
+                    <span
+                      class="px-3 py-1 bg-green-500 text-white text-sm font-medium rounded-full"
+                      >Graded</span
+                    >
+                    <span
+                      class="px-2 py-1 bg-blue-50 text-blue-600 text-lg font-bold rounded"
+                      >B</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3">
+                <div class="flex items-center text-sm text-gray-600">
+                  <svg
+                    class="w-4 h-4 mr-2 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    ></path>
+                  </svg>
+                  <span class="font-medium">Sept 25, 2025</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                  <svg
+                    class="w-4 h-4 mr-2 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                  <span>11:00 AM - 12:30 PM</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                  <svg
+                    class="w-4 h-4 mr-2 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    ></path>
+                  </svg>
+                  <span>90 minutes</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                  <svg
+                    class="w-4 h-4 mr-2 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    ></path>
+                  </svg>
+                  <span>30 Questions</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-2 lg:items-end">
+              <button
+                onclick="viewResults('english-lit')"
+                class="px-6 py-2.5 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
+              >
+                View Results
+              </button>
+              <span class="text-xs text-green-600 font-medium"
+                >78/100 (78%)</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Exam Item 5 - Scheduled -->
+        <div
+          class="exam-item bg-white p-6 rounded-xl border border-gray-200 hover:shadow-md hover:border-blue-200 transition-all"
+          data-status="upcoming"
+          data-subject="mathematics"
+          data-date="2025-10-20"
+        >
+          <div class="flex flex-col lg:flex-row lg:items-center gap-4">
+            <div
+              class="w-16 h-16 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0"
+            >
+              <svg
+                class="w-8 h-8 text-purple-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                ></path>
+              </svg>
+            </div>
+
+            <div class="flex-1">
+              <div
+                class="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-2"
+              >
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-900 mb-1">
+                    Calculus Quiz
+                  </h3>
+                  <div class="flex items-center gap-2">
+                    <span
+                      class="px-3 py-1 bg-purple-50 text-purple-600 text-xs font-medium rounded-full"
+                      >Mathematics</span
+                    >
+                    <span
+                      class="px-3 py-1 bg-blue-50 text-blue-600 text-sm font-medium rounded-full"
+                      >Scheduled</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3">
+                <div class="flex items-center text-sm text-gray-600">
+                  <svg
+                    class="w-4 h-4 mr-2 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    ></path>
+                  </svg>
+                  <span class="font-medium">Oct 20, 2025</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                  <svg
+                    class="w-4 h-4 mr-2 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                  <span>09:00 - 10:00 AM</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                  <svg
+                    class="w-4 h-4 mr-2 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    ></path>
+                  </svg>
+                  <span>60 minutes</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                  <svg
+                    class="w-4 h-4 mr-2 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    ></path>
+                  </svg>
+                  <span>25 Questions</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-2 lg:items-end">
+              <button
+                onclick="viewDetails('calculus-quiz')"
+                class="px-6 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                View Details
+              </button>
+              <span class="text-xs text-gray-500">In 12 days</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty State (hidden by default) -->
+      <div
+        id="emptyState"
+        class="hidden text-center py-12 bg-white rounded-xl border border-gray-200"
+      >
+        <svg
+          class="w-16 h-16 text-gray-300 mx-auto mb-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          ></path>
+        </svg>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">No exams found</h3>
+        <p class="text-sm text-gray-500">
+          Try adjusting your filters to see more results
+        </p>
+      </div>
+    </div>
+
+    <script>
+      let currentFilter = "all";
+      let currentSubjectFilter = "all";
+      let currentSort = "date";
+
+      function goBack() {
+        console.log("Navigate back to Exam Hub");
+        alert("Navigate back to Exam Hub");
+      }
+
+      function filterExams(filter) {
+        currentFilter = filter;
+
+        // Update button styles
+        document.querySelectorAll(".filter-btn").forEach((btn) => {
+          btn.classList.remove(
+            "active",
+            "bg-blue-50",
+            "text-blue-600",
+            "border-blue-200"
+          );
+          btn.classList.add("bg-gray-100", "text-gray-600");
+        });
+
+        const activeBtn = document.getElementById(`filter-${filter}`);
+        activeBtn.classList.add(
+          "active",
+          "bg-blue-50",
+          "text-blue-600",
+          "border-blue-200"
+        );
+        activeBtn.classList.remove("bg-gray-100", "text-gray-600");
+
+        applyFilters();
+      }
+
+      function filterSubject(subject) {
+        currentSubjectFilter = subject;
+
+        // Update button styles
+        document.querySelectorAll(".subject-btn").forEach((btn) => {
+          btn.classList.remove("ring-2", "ring-offset-2");
+        });
+
+        const activeBtn = document.getElementById(`subject-${subject}`);
+        activeBtn.classList.add("ring-2", "ring-offset-2");
+
+        if (subject === "all") {
+          activeBtn.classList.add("ring-gray-400");
+        } else if (subject === "mathematics") {
+          activeBtn.classList.add("ring-purple-400");
+        } else if (subject === "science") {
+          activeBtn.classList.add("ring-green-400");
+        } else if (subject === "languages") {
+          activeBtn.classList.add("ring-pink-400");
+        } else if (subject === "history") {
+          activeBtn.classList.add("ring-indigo-400");
+        }
+
+        applyFilters();
+      }
+
+      function sortExams() {
+        currentSort = document.getElementById("sortSelect").value;
+        applyFilters();
+      }
+
+      function applyFilters() {
+        const examItems = document.querySelectorAll(".exam-item");
+        let visibleCount = 0;
+
+        examItems.forEach((item) => {
+          const status = item.getAttribute("data-status");
+          const subject = item.getAttribute("data-subject");
+
+          let showItem = true;
+
+          // Filter by status
+          if (currentFilter !== "all") {
+            if (currentFilter === "upcoming" && status !== "upcoming")
+              showItem = false;
+            if (currentFilter === "completed" && status !== "completed")
+              showItem = false;
+            if (currentFilter === "graded" && status !== "graded")
+              showItem = false;
+          }
+
+          // Filter by subject
+          if (
+            currentSubjectFilter !== "all" &&
+            subject !== currentSubjectFilter
+          ) {
+            showItem = false;
+          }
+
+          if (showItem) {
+            item.style.display = "block";
+            visibleCount++;
+          } else {
+            item.style.display = "none";
+          }
+        });
+
+        // Update count
+        document.getElementById("examCount").textContent = visibleCount;
+
+        // Show/hide empty state
+        if (visibleCount === 0) {
+          document.getElementById("emptyState").classList.remove("hidden");
+        } else {
+          document.getElementById("emptyState").classList.add("hidden");
+        }
+
+        // Sort items (basic implementation)
+        if (currentSort !== "date") {
+          console.log(`Sorting by: ${currentSort}`);
+          // In a real app, you'd reorder the DOM elements here
+        }
+      }
+
+      function viewDetails(examId) {
+        console.log(`View details: ${examId}`);
+        alert(`Opening exam details for: ${examId}`);
+      }
+
+      function takeExam(examId) {
+        console.log(`Take exam: ${examId}`);
+        alert(`Starting exam: ${examId}`);
+      }
+
+      function viewResults(examId) {
+        console.log(`View results: ${examId}`);
+        alert(`Opening results for: ${examId}`);
+      }
+
+      // Initialize
+      document.addEventListener("DOMContentLoaded", function () {
+        applyFilters();
+
+        // Add entrance animations
+        const items = document.querySelectorAll(".exam-item");
+        items.forEach((item, index) => {
+          item.style.opacity = "0";
+          item.style.transform = "translateY(20px)";
+          setTimeout(() => {
+            item.style.transition = "all 0.5s ease";
+            item.style.opacity = "1";
+            item.style.transform = "translateY(0)";
+          }, index * 100);
+        });
+      });
+
+      // Click animation
+      document.querySelectorAll("button").forEach((button) => {
+        button.addEventListener("click", function () {
+          this.style.transform = "scale(0.98)";
+          setTimeout(() => {
+            this.style.transform = "scale(1)";
+          }, 100);
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fees Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+    <div class="max-w-7xl mx-auto p-4 md:p-6 lg:p-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <button onclick="goBack()" class="mr-4 p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-semibold text-gray-900">Fees Dashboard</h1>
+                        <div class="flex items-center mt-2">
+                            <span class="text-sm text-indigo-600 font-medium">6</span>
+                            <div class="w-12 h-1 bg-indigo-500 rounded-full ml-2"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Academic Year Selector (Desktop) -->
+                <div class="hidden md:block">
+                    <select id="academicYear" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-medium">
+                        <option value="2025-2026" selected>Academic Year 2025-2026</option>
+                        <option value="2024-2025">Academic Year 2024-2025</option>
+                        <option value="2023-2024">Academic Year 2023-2024</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alert Banner for Overdue -->
+        <div class="bg-red-50 border-l-4 border-red-500 rounded-lg p-4 mb-6 flex items-start">
+            <svg class="w-6 h-6 text-red-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            </svg>
+            <div class="flex-1">
+                <h3 class="text-sm font-semibold text-red-800 mb-1">Payment Overdue</h3>
+                <p class="text-sm text-red-700">You have <span class="font-bold">$850.00</span> in overdue payments. Please pay immediately to avoid late fees and exam registration issues.</p>
+                <button onclick="payNow()" class="mt-3 px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors">
+                    Pay Now
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Payment Status Card -->
+        <div class="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl shadow-lg p-6 md:p-8 mb-6 text-white">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Total Fees -->
+                <div>
+                    <p class="text-blue-100 text-sm font-medium mb-2">Total Fees</p>
+                    <p class="text-4xl md:text-5xl font-bold mb-1">$12,200</p>
+                    <p class="text-blue-100 text-xs">Academic Year 2025-2026</p>
+                </div>
+
+                <!-- Amount Paid -->
+                <div>
+                    <p class="text-blue-100 text-sm font-medium mb-2">Amount Paid</p>
+                    <div class="flex items-baseline gap-2 mb-2">
+                        <p class="text-4xl md:text-5xl font-bold">$5,250</p>
+                        <span class="px-2 py-1 bg-blue-500 text-white text-xs font-medium rounded-full">43%</span>
+                    </div>
+                    <div class="w-full bg-blue-500 rounded-full h-2 mb-2">
+                        <div class="bg-white h-2 rounded-full transition-all duration-500" style="width: 43%"></div>
+                    </div>
+                    <p class="text-blue-100 text-xs">8 of 15 payments completed</p>
+                </div>
+
+                <!-- Outstanding Balance -->
+                <div>
+                    <p class="text-blue-100 text-sm font-medium mb-2">Outstanding Balance</p>
+                    <p class="text-4xl md:text-5xl font-bold mb-1">$6,950</p>
+                    <div class="flex flex-wrap gap-2 mt-3">
+                        <button onclick="payNow()" class="px-4 py-2 bg-white text-blue-600 text-sm font-semibold rounded-lg hover:bg-blue-50 transition-colors flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                            Pay Now
+                        </button>
+                        <button onclick="viewStructure()" class="px-4 py-2 bg-blue-500 text-white text-sm font-semibold rounded-lg hover:bg-blue-600 transition-colors">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Next Payment Due -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold text-gray-900">Next Payment Due</h2>
+                <span class="px-3 py-1 bg-orange-50 text-orange-700 text-xs font-medium rounded-full">Due in 7 days</span>
+            </div>
+            
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-base font-semibold text-gray-900">Installment Payment #2</p>
+                            <p class="text-sm text-gray-500">Laboratory Fees, Sports & Activities, Technology Fees</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div>
+                            <p class="text-xs text-gray-500 mb-1">Amount Due</p>
+                            <p class="text-lg font-bold text-gray-900">$850.00</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 mb-1">Due Date</p>
+                            <p class="text-lg font-bold text-orange-600">Oct 15, 2025</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 mb-1">Late Fee</p>
+                            <p class="text-sm text-gray-700">$17.00 (2%/month)</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 mb-1">Payment Method</p>
+                            <p class="text-sm text-gray-700">Any method</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button onclick="payNow()" class="px-6 py-3 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 transition-colors whitespace-nowrap">
+                    Pay $850.00
+                </button>
+            </div>
+        </div>
+
+        <!-- Quick Actions Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <button onclick="viewStructure()" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md hover:border-blue-200 transition-all text-left group">
+                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-200 transition-colors">
+                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-sm font-semibold text-gray-900 mb-1">Fee Structure</h3>
+                <p class="text-xs text-gray-500">View breakdown</p>
+            </button>
+
+            <button onclick="viewHistory()" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md hover:border-green-200 transition-all text-left group">
+                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-green-200 transition-colors">
+                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-sm font-semibold text-gray-900 mb-1">Payment History</h3>
+                <p class="text-xs text-gray-500">View all transactions</p>
+            </button>
+
+            <button onclick="viewReceipts()" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md hover:border-purple-200 transition-all text-left group">
+                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-purple-200 transition-colors">
+                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-sm font-semibold text-gray-900 mb-1">Receipts</h3>
+                <p class="text-xs text-gray-500">Download receipts</p>
+            </button>
+
+            <button onclick="setReminders()" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md hover:border-orange-200 transition-all text-left group">
+                <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-orange-200 transition-colors">
+                    <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                    </svg>
+                </div>
+                <h3 class="text-sm font-semibold text-gray-900 mb-1">Reminders</h3>
+                <p class="text-xs text-gray-500">Set payment alerts</p>
+            </button>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-6">
+            <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                <h2 class="text-lg font-semibold text-gray-900">Recent Transactions</h2>
+                <button onclick="viewHistory()" class="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors">
+                    View All
+                </button>
+            </div>
+            
+            <div class="divide-y divide-gray-200">
+                <!-- Transaction 1 -->
+                <div class="px-6 py-4 hover:bg-gray-50 transition-colors cursor-pointer" onclick="viewTransaction('TXN-2025-1001')">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-gray-900">Tuition Fees - Semester 1</p>
+                                <p class="text-xs text-gray-500">Oct 05, 2025 • TXN-2025-1001</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-bold text-gray-900">$5,000.00</p>
+                            <span class="px-2 py-1 bg-green-50 text-green-700 text-xs font-medium rounded-full">Success</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transaction 2 -->
+                <div class="px-6 py-4 hover:bg-gray-50 transition-colors cursor-pointer" onclick="viewTransaction('TXN-2025-1002')">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-gray-900">Library Fees</p>
+                                <p class="text-xs text-gray-500">Oct 03, 2025 • TXN-2025-1002</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-bold text-gray-900">$150.00</p>
+                            <span class="px-2 py-1 bg-green-50 text-green-700 text-xs font-medium rounded-full">Success</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transaction 3 -->
+                <div class="px-6 py-4 hover:bg-gray-50 transition-colors cursor-pointer" onclick="viewTransaction('TXN-2025-1003')">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-gray-900">Sports & Activities Fee</p>
+                                <p class="text-xs text-gray-500">Sep 28, 2025 • TXN-2025-1003</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-bold text-gray-900">$200.00</p>
+                            <span class="px-2 py-1 bg-red-50 text-red-700 text-xs font-medium rounded-full">Failed</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Schedule -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-6">
+            <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                <div>
+                    <h2 class="text-lg font-semibold text-gray-900">Upcoming Payment Schedule</h2>
+                    <p class="text-sm text-gray-500 mt-1">3 installments remaining</p>
+                </div>
+                <button onclick="viewSchedule()" class="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors">
+                    View Full Schedule
+                </button>
+            </div>
+            
+            <div class="p-6">
+                <div class="space-y-4">
+                    <!-- Installment 1 - Completed -->
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between mb-1">
+                                <p class="text-sm font-semibold text-gray-900">Installment 1</p>
+                                <span class="px-2 py-1 bg-green-50 text-green-700 text-xs font-medium rounded-full">Paid</span>
+                            </div>
+                            <p class="text-xs text-gray-500">Due: Sep 15, 2025 • Paid: Sep 10, 2025</p>
+                        </div>
+                        <p class="text-sm font-bold text-gray-900">$5,250.00</p>
+                    </div>
+
+                    <!-- Installment 2 - Due Soon -->
+                    <div class="flex items-center gap-4 p-4 bg-orange-50 rounded-lg border border-orange-100">
+                        <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between mb-1">
+                                <p class="text-sm font-semibold text-gray-900">Installment 2</p>
+                                <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-medium rounded-full">Due in 7 days</span>
+                            </div>
+                            <p class="text-xs text-gray-600">Due: Oct 15, 2025</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-bold text-gray-900">$850.00</p>
+                            <button onclick="payInstallment(2)" class="mt-1 text-xs font-medium text-orange-600 hover:text-orange-700">Pay now →</button>
+                        </div>
+                    </div>
+
+                    <!-- Installment 3 - Upcoming -->
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-sm font-semibold text-gray-600">3</span>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between mb-1">
+                                <p class="text-sm font-semibold text-gray-900">Installment 3</p>
+                                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full">Upcoming</span>
+                            </div>
+                            <p class="text-xs text-gray-500">Due: Nov 15, 2025</p>
+                        </div>
+                        <p class="text-sm font-bold text-gray-900">$3,550.00</p>
+                    </div>
+
+                    <!-- Installment 4 - Upcoming -->
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-sm font-semibold text-gray-600">4</span>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between mb-1">
+                                <p class="text-sm font-semibold text-gray-900">Installment 4</p>
+                                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full">Upcoming</span>
+                            </div>
+                            <p class="text-xs text-gray-500">Due: Dec 15, 2025</p>
+                        </div>
+                        <p class="text-sm font-bold text-gray-900">$2,550.00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fee Breakdown Chart -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Pie Chart Section -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-6">Fee Breakdown</h2>
+                
+                <!-- Simple Visual Breakdown -->
+                <div class="space-y-3 mb-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+                            <span class="text-sm text-gray-700">Tuition Fees</span>
+                        </div>
+                        <span class="text-sm font-semibold text-gray-900">$5,000 (41%)</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                            <span class="text-sm text-gray-700">Laboratory Fees</span>
+                        </div>
+                        <span class="text-sm font-semibold text-gray-900">$2,000 (16%)</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-3 h-3 bg-purple-500 rounded-full"></div>
+                            <span class="text-sm text-gray-700">Technology Fees</span>
+                        </div>
+                        <span class="text-sm font-semibold text-gray-900">$1,500 (12%)</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-3 h-3 bg-orange-500 rounded-full"></div>
+                            <span class="text-sm text-gray-700">Sports & Activities</span>
+                        </div>
+                        <span class="text-sm font-semibold text-gray-900">$1,200 (10%)</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-3 h-3 bg-pink-500 rounded-full"></div>
+                            <span class="text-sm text-gray-700">Library Fees</span>
+                        </div>
+                        <span class="text-sm font-semibold text-gray-900">$800 (7%)</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-3 h-3 bg-teal-500 rounded-full"></div>
+                            <span class="text-sm text-gray-700">Exam Fees</span>
+                        </div>
+                        <span class="text-sm font-semibold text-gray-900">$1,000 (8%)</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-3 h-3 bg-gray-500 rounded-full"></div>
+                            <span class="text-sm text-gray-700">Miscellaneous</span>
+                        </div>
+                        <span class="text-sm font-semibold text-gray-900">$700 (6%)</span>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-semibold text-gray-900">Total</span>
+                        <span class="text-lg font-bold text-gray-900">$12,200</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Status -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-6">Payment Status</h2>
+                
+                <div class="space-y-4 mb-6">
+                    <!-- Paid -->
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm text-gray-700">Paid</span>
+                            <span class="text-sm font-semibold text-green-600">$5,250 (43%)</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-green-500 h-2 rounded-full transition-all duration-500" style="width: 43%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Pending -->
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm text-gray-700">Pending</span>
+                            <span class="text-sm font-semibold text-orange-600">$850 (7%)</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-orange-500 h-2 rounded-full transition-all duration-500" style="width: 7%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming -->
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm text-gray-700">Upcoming</span>
+                            <span class="text-sm font-semibold text-blue-600">$6,100 (50%)</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-blue-500 h-2 rounded-full transition-all duration-500" style="width: 50%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="p-4 bg-green-50 rounded-lg">
+                        <p class="text-xs text-green-600 font-medium mb-1">Payments Made</p>
+                        <p class="text-2xl font-bold text-green-700">8</p>
+                    </div>
+                    <div class="p-4 bg-orange-50 rounded-lg">
+                        <p class="text-xs text-orange-600 font-medium mb-1">Pending</p>
+                        <p class="text-2xl font-bold text-orange-700">1</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <p class="text-xs text-blue-600 font-medium mb-1">Upcoming</p>
+                        <p class="text-2xl font-bold text-blue-700">6</p>
+                    </div>
+                    <div class="p-4 bg-red-50 rounded-lg">
+                        <p class="text-xs text-red-600 font-medium mb-1">Failed</p>
+                        <p class="text-2xl font-bold text-red-700">2</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation functions
+        function goBack() {
+            console.log('Navigate back to student dashboard');
+            window.history.back();
+        }
+
+        function payNow() {
+            console.log('Navigate to payment page');
+            alert('Redirecting to payment gateway...');
+        }
+
+        function viewStructure() {
+            console.log('Navigate to fee structure page');
+            alert('Opening fee structure...');
+        }
+
+        function viewHistory() {
+            console.log('Navigate to payment history');
+            alert('Opening payment history...');
+        }
+
+        function viewReceipts() {
+            console.log('Navigate to receipts page');
+            alert('Opening receipts...');
+        }
+
+        function setReminders() {
+            console.log('Navigate to reminders settings');
+            alert('Opening payment reminders...');
+        }
+
+        function viewSchedule() {
+            console.log('Navigate to payment schedule');
+            alert('Opening full payment schedule...');
+        }
+
+        function viewTransaction(txnId) {
+            console.log(`View transaction: ${txnId}`);
+            alert(`Opening transaction details for ${txnId}...`);
+        }
+
+        function payInstallment(number) {
+            console.log(`Pay installment ${number}`);
+            alert(`Redirecting to payment for Installment ${number}...`);
+        }
+
+        // Academic year change
+        document.getElementById('academicYear').addEventListener('change', function() {
+            console.log(`Changed to academic year: ${this.value}`);
+            // In real app, fetch new data for selected year
+        });
+
+        // Smooth animations on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.bg-white, .bg-gradient-to-br');
+            elements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    el.style.transition = 'all 0.5s ease-out';
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>

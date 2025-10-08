@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Take Exam - Mathematics Mid-Term</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "system-ui", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        overflow: hidden;
+      }
+      .exam-container {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      .exam-content {
+        flex: 1;
+        overflow-y: auto;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 font-sans">
+    <div class="exam-container">
+      <!-- Fixed Header -->
+      <header
+        class="bg-white border-b-2 border-gray-200 shadow-sm px-6 py-4 flex-shrink-0"
+      >
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <div class="flex items-center">
+              <div
+                class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center"
+              >
+                <svg
+                  class="w-5 h-5 text-purple-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                  ></path>
+                </svg>
+              </div>
+              <div class="ml-3">
+                <h1 class="text-base font-semibold text-gray-900">
+                  Mathematics Mid-Term Exam
+                </h1>
+                <p class="text-xs text-gray-500">
+                  Question <span id="currentQuestionNum">1</span> of 10
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center space-x-4">
+            <!-- Timer -->
+            <div class="flex items-center px-4 py-2 bg-gray-100 rounded-lg">
+              <svg
+                id="timerIcon"
+                class="w-5 h-5 text-gray-600 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+              <span id="timer" class="text-base font-semibold text-gray-900"
+                >01:59:47</span
+              >
+            </div>
+
+            <!-- Auto-save indicator -->
+            <div
+              id="autoSaveIndicator"
+              class="flex items-center text-xs text-gray-500"
+            >
+              <svg
+                class="w-4 h-4 mr-1 text-green-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 13l4 4L19 7"
+                ></path>
+              </svg>
+              <span>Auto-saved</span>
+            </div>
+
+            <!-- Submit Button -->
+            <button
+              onclick="showSubmitConfirmation()"
+              class="px-6 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors shadow-sm"
+            >
+              Submit Exam
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content Area -->
+      <div class="flex flex-1 overflow-hidden">
+        <!-- Question Content -->
+        <div class="exam-content flex-1 p-6">
+          <div class="max-w-4xl mx-auto">
+            <!-- Question Card -->
+            <div
+              id="questionContainer"
+              class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-6"
+            >
+              <!-- Question will be dynamically loaded here -->
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="flex items-center justify-between">
+              <button
+                onclick="previousQuestion()"
+                id="prevBtn"
+                class="px-6 py-3 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                ← Previous
+              </button>
+
+              <button
+                onclick="markForReview()"
+                class="px-6 py-3 border-2 border-orange-500 text-orange-600 text-sm font-medium rounded-lg hover:bg-orange-50 transition-colors"
+              >
+                <svg
+                  class="w-4 h-4 inline mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                  ></path>
+                </svg>
+                Mark for Review
+              </button>
+
+              <button
+                onclick="nextQuestion()"
+                id="nextBtn"
+                class="px-6 py-3 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Next →
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar - Question Palette -->
+        <aside
+          id="sidebar"
+          class="w-80 bg-white border-l border-gray-200 flex-shrink-0 overflow-y-auto"
+        >
+          <div class="p-6">
+            <!-- Toggle Sidebar Button (Mobile) -->
+            <button
+              onclick="toggleSidebar()"
+              class="lg:hidden mb-4 w-full px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg"
+            >
+              Toggle Question Palette
+            </button>
+
+            <h3 class="text-base font-semibold text-gray-900 mb-4">
+              Question Palette
+            </h3>
+
+            <!-- Question Grid -->
+            <div id="questionPalette" class="grid grid-cols-5 gap-2 mb-6">
+              <!-- Questions will be dynamically generated -->
+            </div>
+
+            <!-- Legend -->
+            <div class="space-y-2 mb-6">
+              <div class="flex items-center text-xs text-gray-600">
+                <div
+                  class="w-8 h-8 bg-green-100 border-2 border-green-500 rounded-lg flex items-center justify-center font-medium text-green-700 mr-2"
+                >
+                  1
+                </div>
+                <span>Answered</span>
+              </div>
+              <div class="flex items-center text-xs text-gray-600">
+                <div
+                  class="w-8 h-8 bg-white border-2 border-gray-300 rounded-lg flex items-center justify-center font-medium text-gray-700 mr-2"
+                >
+                  2
+                </div>
+                <span>Not Answered</span>
+              </div>
+              <div class="flex items-center text-xs text-gray-600">
+                <div
+                  class="w-8 h-8 bg-orange-100 border-2 border-orange-500 rounded-lg flex items-center justify-center font-medium text-orange-700 mr-2"
+                >
+                  3
+                </div>
+                <span>Marked for Review</span>
+              </div>
+              <div class="flex items-center text-xs text-gray-600">
+                <div
+                  class="w-8 h-8 bg-blue-100 border-2 border-blue-500 rounded-lg flex items-center justify-center font-medium text-blue-700 mr-2"
+                >
+                  4
+                </div>
+                <span>Current</span>
+              </div>
+            </div>
+
+            <!-- Instructions Button -->
+            <button
+              onclick="showInstructions()"
+              class="w-full px-4 py-3 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors"
+            >
+              <svg
+                class="w-4 h-4 inline mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+              View Instructions
+            </button>
+
+            <!-- Summary -->
+            <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+              <h4 class="text-sm font-semibold text-gray-900 mb-3">Summary</h4>
+              <div class="space-y-2 text-xs text-gray-600">
+                <div class="flex justify-between">
+                  <span>Answered:</span>
+                  <span id="answeredCount" class="font-semibold text-green-600"
+                    >0</span
+                  >
+                </div>
+                <div class="flex justify-between">
+                  <span>Not Answered:</span>
+                  <span
+                    id="notAnsweredCount"
+                    class="font-semibold text-gray-900"
+                    >10</span
+                  >
+                </div>
+                <div class="flex justify-between">
+                  <span>Marked for Review:</span>
+                  <span id="markedCount" class="font-semibold text-orange-600"
+                    >0</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- Submit Confirmation Modal -->
+    <div
+      id="submitModal"
+      class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+    >
+      <div class="bg-white rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
+        <div class="flex items-center mb-4">
+          <div
+            class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center"
+          >
+            <svg
+              class="w-6 h-6 text-orange-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              ></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 ml-3">Submit Exam?</h3>
+        </div>
+
+        <div class="mb-6">
+          <p class="text-sm text-gray-600 mb-4">
+            Are you sure you want to submit your exam? Once submitted, you
+            cannot make any changes.
+          </p>
+
+          <div class="bg-gray-50 rounded-lg p-4 space-y-2 text-sm">
+            <div class="flex justify-between">
+              <span class="text-gray-600">Answered:</span>
+              <span id="modalAnswered" class="font-semibold text-green-600"
+                >0/10</span
+              >
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">Not Answered:</span>
+              <span id="modalNotAnswered" class="font-semibold text-gray-900"
+                >10/10</span
+              >
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">Marked for Review:</span>
+              <span id="modalMarked" class="font-semibold text-orange-600"
+                >0</span
+              >
+            </div>
+          </div>
+
+          <div
+            class="mt-4 p-3 bg-orange-50 border border-orange-200 rounded-lg"
+          >
+            <p class="text-xs text-orange-800">
+              <strong>Warning:</strong> You have unanswered questions. These
+              will be marked as incorrect.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex gap-3">
+          <button
+            onclick="closeSubmitModal()"
+            class="flex-1 px-4 py-3 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onclick="submitExam()"
+            class="flex-1 px-4 py-3 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
+          >
+            Submit Now
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Instructions Modal -->
+    <div
+      id="instructionsModal"
+      class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+    >
+      <div
+        class="bg-white rounded-xl shadow-xl max-w-2xl w-full mx-4 p-6 max-h-[80vh] overflow-y-auto"
+      >
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-xl font-semibold text-gray-900">Exam Instructions</h3>
+          <button
+            onclick="closeInstructions()"
+            class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <svg
+              class="w-5 h-5 text-gray-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="space-y-3 text-sm text-gray-700">
+          <p>• Read all questions carefully before answering.</p>
+          <p>
+            • You can navigate between questions using the Next/Previous buttons
+            or the question palette.
+          </p>
+          <p>
+            • Mark questions for review if you want to return to them later.
+          </p>
+          <p>• Your answers are automatically saved every 30 seconds.</p>
+          <p>• Keep an eye on the timer at the top of the screen.</p>
+          <p>• Once you submit the exam, you cannot make any changes.</p>
+        </div>
+
+        <button
+          onclick="closeInstructions()"
+          class="mt-6 w-full px-4 py-3 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          Got it
+        </button>
+      </div>
+    </div>
+
+    <script>
+      // Sample questions data
+      const questions = [
+        {
+          id: 1,
+          type: "mcq",
+          question: "What is the value of x in the equation 2x + 5 = 13?",
+          options: ["x = 2", "x = 4", "x = 6", "x = 8"],
+          answer: null,
+        },
+        {
+          id: 2,
+          type: "mcq",
+          question: "Which of the following is a prime number?",
+          options: ["15", "17", "21", "25"],
+          answer: null,
+        },
+        {
+          id: 3,
+          type: "short",
+          question:
+            "Calculate the area of a circle with radius 7 cm. (Use π = 3.14)",
+          answer: "",
+        },
+        {
+          id: 4,
+          type: "mcq",
+          question: "What is the derivative of x² + 3x?",
+          options: ["2x + 3", "x² + 3", "2x", "x + 3"],
+          answer: null,
+        },
+        {
+          id: 5,
+          type: "essay",
+          question:
+            "Explain the Pythagorean theorem and provide an example of its application in real life.",
+          answer: "",
+          maxLength: 500,
+        },
+        {
+          id: 6,
+          type: "mcq",
+          question:
+            "If a triangle has sides of length 3, 4, and 5, what type of triangle is it?",
+          options: ["Equilateral", "Isosceles", "Right-angled", "Scalene"],
+          answer: null,
+        },
+        {
+          id: 7,
+          type: "short",
+          question: "Solve for y: 3y - 7 = 14",
+          answer: "",
+        },
+        {
+          id: 8,
+          type: "mcq",
+          question: "What is 25% of 200?",
+          options: ["25", "50", "75", "100"],
+          answer: null,
+        },
+        {
+          id: 9,
+          type: "short",
+          question: "Find the sum of the first 10 natural numbers.",
+          answer: "",
+        },
+        {
+          id: 10,
+          type: "mcq",
+          question:
+            "Which mathematical constant is approximately equal to 2.718?",
+          options: ["π (pi)", "e (Euler's number)", "φ (phi)", "√2"],
+          answer: null,
+        },
+      ];
+
+      let currentQuestion = 0;
+      let markedQuestions = new Set();
+      let timeRemaining = 7200; // 2 hours in seconds
+      let autoSaveInterval;
+      let timerInterval;
+
+      // Initialize exam
+      function initExam() {
+        renderQuestionPalette();
+        displayQuestion(currentQuestion);
+        startTimer();
+        startAutoSave();
+      }
+
+      // Render question palette
+      function renderQuestionPalette() {
+        const palette = document.getElementById("questionPalette");
+        palette.innerHTML = "";
+
+        questions.forEach((q, index) => {
+          const btn = document.createElement("button");
+          btn.className =
+            "w-10 h-10 rounded-lg flex items-center justify-center font-medium text-sm transition-all";
+          btn.textContent = index + 1;
+          btn.onclick = () => goToQuestion(index);
+
+          updateQuestionButtonStyle(btn, index);
+          palette.appendChild(btn);
+        });
+
+        updateSummary();
+      }
+
+      // Update question button style
+      function updateQuestionButtonStyle(btn, index) {
+        const q = questions[index];
+
+        // Remove all classes
+        btn.className =
+          "w-10 h-10 rounded-lg flex items-center justify-center font-medium text-sm transition-all";
+
+        if (index === currentQuestion) {
+          btn.className +=
+            " bg-blue-100 border-2 border-blue-500 text-blue-700";
+        } else if (markedQuestions.has(index)) {
+          btn.className +=
+            " bg-orange-100 border-2 border-orange-500 text-orange-700";
+        } else if (isAnswered(q)) {
+          btn.className +=
+            " bg-green-100 border-2 border-green-500 text-green-700";
+        } else {
+          btn.className +=
+            " bg-white border-2 border-gray-300 text-gray-700 hover:bg-gray-50";
+        }
+      }
+
+      // Check if question is answered
+      function isAnswered(q) {
+        if (q.type === "mcq") {
+          return q.answer !== null;
+        } else {
+          return q.answer && q.answer.trim() !== "";
+        }
+      }
+
+      // Display question
+      function displayQuestion(index) {
+        const container = document.getElementById("questionContainer");
+        const q = questions[index];
+
+        let html = `
+                <div class="mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="px-3 py-1 bg-purple-100 text-purple-600 text-xs font-medium rounded-full">
+                            ${
+                              q.type === "mcq"
+                                ? "Multiple Choice"
+                                : q.type === "short"
+                                ? "Short Answer"
+                                : "Essay"
+                            }
+                        </span>
+                        <span class="text-sm text-gray-500">Question ${
+                          index + 1
+                        } of ${questions.length}</span>
+                    </div>
+                    <h2 class="text-lg font-semibold text-gray-900 leading-relaxed">${
+                      q.question
+                    }</h2>
+                </div>
+            `;
+
+        if (q.type === "mcq") {
+          html += '<div class="space-y-3">';
+          q.options.forEach((option, i) => {
+            const checked = q.answer === i ? "checked" : "";
+            html += `
+                        <label class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all ${
+                          checked ? "border-blue-500 bg-blue-50" : ""
+                        }">
+                            <input type="radio" name="answer" value="${i}" ${checked} onchange="saveAnswer(${i})" class="w-5 h-5 text-blue-600 focus:ring-2 focus:ring-blue-500">
+                            <span class="ml-3 text-base text-gray-900">${option}</span>
+                        </label>
+                    `;
+          });
+          html += "</div>";
+        } else if (q.type === "short") {
+          html += `
+                    <div class="mt-4">
+                        <input type="text" value="${q.answer}" oninput="saveAnswer(this.value)" 
+                            class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
+                            placeholder="Enter your answer here...">
+                    </div>
+                `;
+        } else if (q.type === "essay") {
+          html += `
+                    <div class="mt-4">
+                        <textarea oninput="saveAnswer(this.value)" 
+                            class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base resize-none"
+                            rows="10" 
+                            placeholder="Write your answer here..."
+                            maxlength="${q.maxLength}">${q.answer}</textarea>
+                        <div class="flex justify-between mt-2 text-xs text-gray-500">
+                            <span>Minimum 100 characters recommended</span>
+                            <span id="charCount">${q.answer.length}/${q.maxLength}</span>
+                        </div>
+                    </div>
+                `;
+        }
+
+        container.innerHTML = html;
+
+        // Update character count for essay
+        if (q.type === "essay") {
+          const textarea = container.querySelector("textarea");
+          textarea.addEventListener("input", function () {
+            document.getElementById(
+              "charCount"
+            ).textContent = `${this.value.length}/${q.maxLength}`;
+          });
+        }
+
+        // Update navigation
+        document.getElementById("currentQuestionNum").textContent = index + 1;
+        document.getElementById("prevBtn").disabled = index === 0;
+        document.getElementById("nextBtn").textContent =
+          index === questions.length - 1 ? "Finish" : "Next →";
+      }
+
+      // Save answer
+      function saveAnswer(value) {
+        const q = questions[currentQuestion];
+        q.answer = value;
+        renderQuestionPalette();
+        showAutoSaveIndicator();
+      }
+
+      // Navigation functions
+      function nextQuestion() {
+        if (currentQuestion < questions.length - 1) {
+          currentQuestion++;
+          displayQuestion(currentQuestion);
+          renderQuestionPalette();
+        } else {
+          showSubmitConfirmation();
+        }
+      }
+
+      function previousQuestion() {
+        if (currentQuestion > 0) {
+          currentQuestion--;
+          displayQuestion(currentQuestion);
+          renderQuestionPalette();
+        }
+      }
+
+      function goToQuestion(index) {
+        currentQuestion = index;
+        displayQuestion(currentQuestion);
+        renderQuestionPalette();
+      }
+
+      function markForReview() {
+        if (markedQuestions.has(currentQuestion)) {
+          markedQuestions.delete(currentQuestion);
+        } else {
+          markedQuestions.add(currentQuestion);
+        }
+        renderQuestionPalette();
+      }
+
+      // Timer
+      function startTimer() {
+        timerInterval = setInterval(() => {
+          timeRemaining--;
+          updateTimerDisplay();
+
+          if (timeRemaining <= 0) {
+            clearInterval(timerInterval);
+            alert("Time is up! Your exam will be automatically submitted.");
+            submitExam();
+          }
+        }, 1000);
+      }
+
+      function updateTimerDisplay() {
+        const hours = Math.floor(timeRemaining / 3600);
+        const minutes = Math.floor((timeRemaining % 3600) / 60);
+        const seconds = timeRemaining % 60;
+
+        const display = `${String(hours).padStart(2, "0")}:${String(
+          minutes
+        ).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+        document.getElementById("timer").textContent = display;
+
+        // Change color when less than 5 minutes
+        const timerElement = document.getElementById("timer");
+        const timerIcon = document.getElementById("timerIcon");
+        if (timeRemaining < 300) {
+          timerElement.classList.add("text-red-600");
+          timerIcon.classList.add("text-red-600");
+          timerIcon.classList.remove("text-gray-600");
+        }
+      }
+
+      // Auto-save
+      function startAutoSave() {
+        autoSaveInterval = setInterval(() => {
+          showAutoSaveIndicator();
+        }, 30000); // 30 seconds
+      }
+
+      function showAutoSaveIndicator() {
+        const indicator = document.getElementById("autoSaveIndicator");
+        indicator.innerHTML = `
+                <svg class="w-4 h-4 mr-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>Auto-saved</span>
+            `;
+      }
+
+      // Update summary
+      function updateSummary() {
+        const answered = questions.filter((q) => isAnswered(q)).length;
+        const notAnswered = questions.length - answered;
+        const marked = markedQuestions.size;
+
+        document.getElementById("answeredCount").textContent = answered;
+        document.getElementById("notAnsweredCount").textContent = notAnswered;
+        document.getElementById("markedCount").textContent = marked;
+      }
+
+      // Submit functions
+      function showSubmitConfirmation() {
+        const answered = questions.filter((q) => isAnswered(q)).length;
+        const notAnswered = questions.length - answered;
+        const marked = markedQuestions.size;
+
+        document.getElementById(
+          "modalAnswered"
+        ).textContent = `${answered}/${questions.length}`;
+        document.getElementById(
+          "modalNotAnswered"
+        ).textContent = `${notAnswered}/${questions.length}`;
+        document.getElementById("modalMarked").textContent = marked;
+
+        document.getElementById("submitModal").classList.remove("hidden");
+      }
+
+      function closeSubmitModal() {
+        document.getElementById("submitModal").classList.add("hidden");
+      }
+
+      function submitExam() {
+        clearInterval(timerInterval);
+        clearInterval(autoSaveInterval);
+        alert("Exam submitted successfully! Redirecting to results page...");
+        // In real app, would submit data and redirect
+        window.location.href = "#";
+      }
+
+      // Instructions modal
+      function showInstructions() {
+        document.getElementById("instructionsModal").classList.remove("hidden");
+      }
+
+      function closeInstructions() {
+        document.getElementById("instructionsModal").classList.add("hidden");
+      }
+
+      // Toggle sidebar (mobile)
+      function toggleSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        sidebar.classList.toggle("hidden");
+      }
+
+      // Prevent accidental navigation away
+      window.addEventListener("beforeunload", function (e) {
+        e.preventDefault();
+        e.returnValue = "";
+      });
+
+      // Initialize exam on load
+      document.addEventListener("DOMContentLoaded", initExam);
+    </script>
+  </body>
+</html>

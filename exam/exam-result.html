@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exam Results - Mathematics Mid-Term</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/recharts@2.5.0/dist/Recharts.js"></script> -->
+    <!-- <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script> -->
+    <!-- <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script> -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "system-ui", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes scaleIn {
+        from {
+          opacity: 0;
+          transform: scale(0.8);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .fade-in-up {
+        animation: fadeInUp 0.6s ease-out forwards;
+      }
+
+      .scale-in {
+        animation: scaleIn 0.5s ease-out forwards;
+      }
+
+      .delay-1 {
+        animation-delay: 0.1s;
+        opacity: 0;
+      }
+      .delay-2 {
+        animation-delay: 0.2s;
+        opacity: 0;
+      }
+      .delay-3 {
+        animation-delay: 0.3s;
+        opacity: 0;
+      }
+      .delay-4 {
+        animation-delay: 0.4s;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 min-h-screen font-sans">
+    <div class="max-w-7xl mx-auto p-6 md:p-8">
+      <!-- Header with Navigation -->
+      <div class="mb-8">
+        <div class="flex items-center mb-4">
+          <button
+            onclick="goBack()"
+            class="mr-4 p-2 hover:bg-white rounded-lg transition-colors border border-gray-200"
+          >
+            <svg
+              class="w-5 h-5 text-gray-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              ></path>
+            </svg>
+          </button>
+          <div class="flex-1">
+            <div class="flex items-center text-sm text-gray-500 mb-2">
+              <span class="hover:text-gray-900 cursor-pointer">Dashboard</span>
+              <svg
+                class="w-4 h-4 mx-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                ></path>
+              </svg>
+              <span class="hover:text-gray-900 cursor-pointer">Exam Hub</span>
+              <svg
+                class="w-4 h-4 mx-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                ></path>
+              </svg>
+              <span class="text-gray-900 font-medium">Results</span>
+            </div>
+            <h1 class="text-2xl font-semibold text-gray-900">Exam Results</h1>
+            <div class="w-12 h-1 bg-blue-500 rounded-full mt-2"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Result Header Card -->
+      <div
+        class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 md:p-8 mb-6 scale-in"
+      >
+        <div
+          class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6"
+        >
+          <!-- Exam Info -->
+          <div class="flex items-start">
+            <div
+              class="w-16 h-16 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0"
+            >
+              <svg
+                class="w-8 h-8 text-purple-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                ></path>
+              </svg>
+            </div>
+            <div class="ml-4">
+              <h2 class="text-xl font-semibold text-gray-900 mb-2">
+                Mid-Term Mathematics Exam
+              </h2>
+              <div class="flex flex-wrap items-center gap-2">
+                <span
+                  class="px-3 py-1 bg-purple-50 text-purple-600 text-sm font-medium rounded-full"
+                  >Mathematics</span
+                >
+                <span class="text-sm text-gray-500">•</span>
+                <span class="text-sm text-gray-600"
+                  >Exam Date: Oct 12, 2025</span
+                >
+                <span class="text-sm text-gray-500">•</span>
+                <span class="text-sm text-gray-600"
+                  >Published: Oct 20, 2025</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Grade Display -->
+          <div class="flex items-center gap-6">
+            <div class="text-center">
+              <div
+                class="w-32 h-32 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center shadow-lg"
+              >
+                <span class="text-5xl font-bold text-white">A</span>
+              </div>
+              <p class="mt-3 text-sm font-semibold text-gray-600">Excellent</p>
+            </div>
+            <div class="text-center">
+              <div
+                class="px-6 py-3 bg-green-50 border-2 border-green-500 rounded-lg"
+              >
+                <svg
+                  class="w-8 h-8 text-green-600 mx-auto mb-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+                <p class="text-lg font-bold text-green-700">PASSED</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Performance Summary Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <!-- Score Card -->
+        <div
+          class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 fade-in-up delay-1"
+        >
+          <div class="flex items-center justify-between mb-2">
+            <div
+              class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center"
+            >
+              <svg
+                class="w-5 h-5 text-blue-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <p class="text-sm text-gray-500 mb-1">Score</p>
+          <p class="text-3xl font-bold text-gray-900">
+            92<span class="text-lg text-gray-500">/100</span>
+          </p>
+          <p class="text-xs text-green-600 mt-1">Above Average</p>
+        </div>
+
+        <!-- Percentage Card -->
+        <div
+          class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 fade-in-up delay-2"
+        >
+          <div class="flex items-center justify-between mb-2">
+            <div
+              class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center"
+            >
+              <svg
+                class="w-5 h-5 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <p class="text-sm text-gray-500 mb-1">Percentage</p>
+          <p class="text-3xl font-bold text-gray-900">
+            92<span class="text-lg text-gray-500">%</span>
+          </p>
+          <p class="text-xs text-green-600 mt-1">+15% from last exam</p>
+        </div>
+
+        <!-- Rank Card -->
+        <div
+          class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 fade-in-up delay-3"
+        >
+          <div class="flex items-center justify-between mb-2">
+            <div
+              class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center"
+            >
+              <svg
+                class="w-5 h-5 text-orange-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <p class="text-sm text-gray-500 mb-1">Class Rank</p>
+          <p class="text-3xl font-bold text-gray-900">
+            5<span class="text-lg text-gray-500">/45</span>
+          </p>
+          <p class="text-xs text-orange-600 mt-1">Top 11%</p>
+        </div>
+
+        <!-- Questions Correct -->
+        <div
+          class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 fade-in-up delay-4"
+        >
+          <div class="flex items-center justify-between mb-2">
+            <div
+              class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center"
+            >
+              <svg
+                class="w-5 h-5 text-purple-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <p class="text-sm text-gray-500 mb-1">Correct Answers</p>
+          <p class="text-3xl font-bold text-gray-900">
+            46<span class="text-lg text-gray-500">/50</span>
+          </p>
+          <p class="text-xs text-purple-600 mt-1">4 incorrect</p>
+        </div>
+      </div>
+
+      <!-- Two Column Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Main Content (2/3) -->
+        <div class="lg:col-span-2 space-y-6">
+          <!-- Section-wise Performance -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">
+              Section-wise Performance
+            </h3>
+            <div class="space-y-4">
+              <!-- Algebra Section -->
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <div class="flex items-center">
+                    <div
+                      class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center mr-3"
+                    >
+                      <svg
+                        class="w-4 h-4 text-purple-600"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
+                        ></path>
+                      </svg>
+                    </div>
+                    <span class="text-sm font-medium text-gray-900"
+                      >Algebra & Equations</span
+                    >
+                  </div>
+                  <span class="text-sm font-semibold text-gray-900">18/20</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    class="bg-green-500 h-2 rounded-full transition-all duration-500"
+                    style="width: 90%"
+                  ></div>
+                </div>
+                <p class="text-xs text-gray-500 mt-1">90% - Excellent</p>
+              </div>
+
+              <!-- Geometry Section -->
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <div class="flex items-center">
+                    <div
+                      class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3"
+                    >
+                      <svg
+                        class="w-4 h-4 text-blue-600"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"
+                        ></path>
+                      </svg>
+                    </div>
+                    <span class="text-sm font-medium text-gray-900"
+                      >Geometry</span
+                    >
+                  </div>
+                  <span class="text-sm font-semibold text-gray-900">14/15</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    class="bg-green-500 h-2 rounded-full transition-all duration-500"
+                    style="width: 93%"
+                  ></div>
+                </div>
+                <p class="text-xs text-gray-500 mt-1">93% - Excellent</p>
+              </div>
+
+              <!-- Calculus Section -->
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <div class="flex items-center">
+                    <div
+                      class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center mr-3"
+                    >
+                      <svg
+                        class="w-4 h-4 text-orange-600"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                        ></path>
+                      </svg>
+                    </div>
+                    <span class="text-sm font-medium text-gray-900"
+                      >Calculus</span
+                    >
+                  </div>
+                  <span class="text-sm font-semibold text-gray-900">14/15</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    class="bg-blue-500 h-2 rounded-full transition-all duration-500"
+                    style="width: 87%"
+                  ></div>
+                </div>
+                <p class="text-xs text-gray-500 mt-1">87% - Good</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Question-wise Breakdown (Toggle) -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-semibold text-gray-900">
+                Question-wise Breakdown
+              </h3>
+              <button
+                onclick="toggleQuestions()"
+                id="toggleBtn"
+                class="px-4 py-2 bg-blue-50 text-blue-600 text-sm font-medium rounded-lg hover:bg-blue-100 transition-colors"
+              >
+                Show Details
+              </button>
+            </div>
+
+            <div id="questionBreakdown" class="hidden space-y-4 mt-4">
+              <!-- Question 1 - Correct -->
+              <div class="border border-gray-200 rounded-lg p-4 bg-green-50">
+                <div class="flex items-start justify-between mb-2">
+                  <div class="flex items-start">
+                    <div
+                      class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0"
+                    >
+                      <svg
+                        class="w-5 h-5 text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M5 13l4 4L19 7"
+                        ></path>
+                      </svg>
+                    </div>
+                    <div class="ml-3">
+                      <p class="text-sm font-medium text-gray-900">
+                        Question 1
+                      </p>
+                      <p class="text-sm text-gray-700 mt-1">
+                        What is the value of x in the equation 2x + 5 = 13?
+                      </p>
+                    </div>
+                  </div>
+                  <span
+                    class="px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full"
+                    >+2</span
+                  >
+                </div>
+                <div class="ml-11 mt-2 space-y-2">
+                  <div class="flex items-center">
+                    <span class="text-xs font-medium text-gray-600 w-24"
+                      >Your Answer:</span
+                    >
+                    <span class="text-sm text-green-700 font-medium"
+                      >x = 4</span
+                    >
+                  </div>
+                  <div class="flex items-center">
+                    <span class="text-xs font-medium text-gray-600 w-24"
+                      >Correct Answer:</span
+                    >
+                    <span class="text-sm text-green-700 font-medium"
+                      >x = 4</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <!-- Question 2 - Incorrect -->
+              <div class="border border-gray-200 rounded-lg p-4 bg-red-50">
+                <div class="flex items-start justify-between mb-2">
+                  <div class="flex items-start">
+                    <div
+                      class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0"
+                    >
+                      <svg
+                        class="w-5 h-5 text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M6 18L18 6M6 6l12 12"
+                        ></path>
+                      </svg>
+                    </div>
+                    <div class="ml-3">
+                      <p class="text-sm font-medium text-gray-900">
+                        Question 2
+                      </p>
+                      <p class="text-sm text-gray-700 mt-1">
+                        Which of the following is a prime number?
+                      </p>
+                    </div>
+                  </div>
+                  <span
+                    class="px-2 py-1 bg-red-100 text-red-700 text-xs font-semibold rounded-full"
+                    >0</span
+                  >
+                </div>
+                <div class="ml-11 mt-2 space-y-2">
+                  <div class="flex items-center">
+                    <span class="text-xs font-medium text-gray-600 w-24"
+                      >Your Answer:</span
+                    >
+                    <span class="text-sm text-red-700 font-medium line-through"
+                      >15</span
+                    >
+                  </div>
+                  <div class="flex items-center">
+                    <span class="text-xs font-medium text-gray-600 w-24"
+                      >Correct Answer:</span
+                    >
+                    <span class="text-sm text-green-700 font-medium">17</span>
+                  </div>
+                </div>
+              </div>
+
+              <p class="text-sm text-gray-500 text-center pt-2">
+                Showing 2 of 50 questions
+              </p>
+            </div>
+          </div>
+
+          <!-- Performance Chart -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">
+              Topic-wise Performance
+            </h3>
+            <div class="h-80 flex items-center justify-center">
+              <canvas id="performanceChart" class="max-w-full"></canvas>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mt-4">
+              <div class="flex items-center">
+                <div class="w-3 h-3 bg-purple-500 rounded-full mr-2"></div>
+                <span class="text-xs text-gray-600">Algebra: 90%</span>
+              </div>
+              <div class="flex items-center">
+                <div class="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+                <span class="text-xs text-gray-600">Geometry: 93%</span>
+              </div>
+              <div class="flex items-center">
+                <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                <span class="text-xs text-gray-600">Calculus: 87%</span>
+              </div>
+              <div class="flex items-center">
+                <div class="w-3 h-3 bg-orange-500 rounded-full mr-2"></div>
+                <span class="text-xs text-gray-600">Trigonometry: 95%</span>
+              </div>
+              <div class="flex items-center">
+                <div class="w-3 h-3 bg-pink-500 rounded-full mr-2"></div>
+                <span class="text-xs text-gray-600">Statistics: 92%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar (1/3) -->
+        <div class="lg:col-span-1 space-y-6">
+          <!-- Instructor Feedback -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center mb-4">
+              <div
+                class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-semibold"
+              >
+                JS
+              </div>
+              <div class="ml-3">
+                <p class="text-sm font-semibold text-gray-900">
+                  Dr. Jane Smith
+                </p>
+                <p class="text-xs text-gray-500">Instructor</p>
+              </div>
+            </div>
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div class="flex items-start">
+                <svg
+                  class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+                  ></path>
+                </svg>
+                <div class="ml-3">
+                  <p class="text-sm text-blue-900 font-medium mb-2">Feedback</p>
+                  <p class="text-sm text-blue-800">
+                    Excellent performance! Your understanding of algebraic
+                    concepts and geometry is outstanding. Focus a bit more on
+                    calculus differentiation rules for even better results.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h3 class="text-base font-semibold text-gray-900 mb-4">
+              Quick Actions
+            </h3>
+            <div class="space-y-3">
+              <button
+                onclick="downloadResult()"
+                class="w-full px-4 py-3 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center"
+              >
+                <svg
+                  class="w-4 h-4 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                  ></path>
+                </svg>
+                Download Result Card
+              </button>
+              <button
+                onclick="viewAnalysis()"
+                class="w-full px-4 py-3 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center"
+              >
+                <svg
+                  class="w-4 h-4 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                  ></path>
+                </svg>
+                View Detailed Analysis
+              </button>
+              <button
+                onclick="shareResult()"
+                class="w-full px-4 py-3 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center"
+              >
+                <svg
+                  class="w-4 h-4 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+                  ></path>
+                </svg>
+                Share Result
+              </button>
+            </div>
+          </div>
+
+          <!-- Comparison Card -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h3 class="text-base font-semibold text-gray-900 mb-4">
+              Class Comparison
+            </h3>
+            <div class="space-y-4">
+              <div>
+                <div class="flex justify-between text-sm mb-2">
+                  <span class="text-gray-600">Class Average</span>
+                  <span class="font-semibold text-gray-900">78%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    class="bg-gray-400 h-2 rounded-full"
+                    style="width: 78%"
+                  ></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-sm mb-2">
+                  <span class="text-gray-600">Your Score</span>
+                  <span class="font-semibold text-green-600">92%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    class="bg-green-500 h-2 rounded-full"
+                    style="width: 92%"
+                  ></div>
+                </div>
+              </div>
+              <div class="pt-3 border-t border-gray-100">
+                <p class="text-sm text-green-600">
+                  <svg
+                    class="w-4 h-4 inline mr-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 10l7-7m0 0l7 7m-7-7v18"
+                    ></path>
+                  </svg>
+                  You scored 14% above the class average
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Actions -->
+      <div class="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
+        <button
+          onclick="goToExamHub()"
+          class="px-6 py-3 bg-gray-100 text-gray-700 text-base font-medium rounded-lg hover:bg-gray-200 transition-colors"
+        >
+          Back to Exam Hub
+        </button>
+        <button
+          onclick="viewSchedule()"
+          class="px-6 py-3 bg-white border-2 border-gray-300 text-gray-700 text-base font-medium rounded-lg hover:bg-gray-50 transition-colors"
+        >
+          View Exam Schedule
+        </button>
+      </div>
+    </div>
+
+    <script>
+      // Toggle question breakdown
+      function toggleQuestions() {
+        const breakdown = document.getElementById("questionBreakdown");
+        const btn = document.getElementById("toggleBtn");
+
+        if (breakdown.classList.contains("hidden")) {
+          breakdown.classList.remove("hidden");
+          btn.textContent = "Hide Details";
+        } else {
+          breakdown.classList.add("hidden");
+          btn.textContent = "Show Details";
+        }
+      }
+
+      // Simple radar chart using canvas
+      function drawRadarChart() {
+        const canvas = document.getElementById("performanceChart");
+        if (!canvas) return;
+
+        const ctx = canvas.getContext("2d");
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const radius = Math.min(centerX, centerY) - 40;
+
+        const topics = [
+          "Algebra",
+          "Geometry",
+          "Calculus",
+          "Trigonometry",
+          "Statistics",
+        ];
+        const scores = [90, 93, 87, 95, 92];
+        const maxScore = 100;
+
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw grid circles
+        ctx.strokeStyle = "#E5E7EB";
+        ctx.lineWidth = 1;
+        for (let i = 1; i <= 5; i++) {
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, (radius / 5) * i, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+
+        // Draw axes
+        const angleStep = (Math.PI * 2) / topics.length;
+        topics.forEach((topic, i) => {
+          const angle = angleStep * i - Math.PI / 2;
+          const x = centerX + radius * Math.cos(angle);
+          const y = centerY + radius * Math.sin(angle);
+
+          ctx.beginPath();
+          ctx.moveTo(centerX, centerY);
+          ctx.lineTo(x, y);
+          ctx.strokeStyle = "#E5E7EB";
+          ctx.stroke();
+
+          // Draw labels
+          const labelX = centerX + (radius + 30) * Math.cos(angle);
+          const labelY = centerY + (radius + 30) * Math.sin(angle);
+          ctx.fillStyle = "#4B5563";
+          ctx.font = "12px Inter";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText(topic, labelX, labelY);
+        });
+
+        // Draw data polygon
+        ctx.beginPath();
+        scores.forEach((score, i) => {
+          const angle = angleStep * i - Math.PI / 2;
+          const distance = (score / maxScore) * radius;
+          const x = centerX + distance * Math.cos(angle);
+          const y = centerY + distance * Math.sin(angle);
+
+          if (i === 0) {
+            ctx.moveTo(x, y);
+          } else {
+            ctx.lineTo(x, y);
+          }
+        });
+        ctx.closePath();
+        ctx.fillStyle = "rgba(59, 130, 246, 0.2)";
+        ctx.fill();
+        ctx.strokeStyle = "#3B82F6";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Draw data points
+        scores.forEach((score, i) => {
+          const angle = angleStep * i - Math.PI / 2;
+          const distance = (score / maxScore) * radius;
+          const x = centerX + distance * Math.cos(angle);
+          const y = centerY + distance * Math.sin(angle);
+
+          ctx.beginPath();
+          ctx.arc(x, y, 4, 0, Math.PI * 2);
+          ctx.fillStyle = "#3B82F6";
+          ctx.fill();
+        });
+      }
+
+      // Navigation functions
+      function goBack() {
+        console.log("Go back");
+        alert("Navigate back");
+      }
+
+      function downloadResult() {
+        console.log("Download result card");
+        alert("Downloading result card as PDF...");
+      }
+
+      function viewAnalysis() {
+        console.log("View detailed analysis");
+        alert("Opening detailed performance analysis...");
+      }
+
+      function shareResult() {
+        console.log("Share result");
+        alert("Share result via email or social media...");
+      }
+
+      function goToExamHub() {
+        console.log("Go to Exam Hub");
+        alert("Navigate to Exam Hub");
+      }
+
+      function viewSchedule() {
+        console.log("View schedule");
+        alert("Navigate to Exam Schedule");
+      }
+
+      // Initialize chart on load
+      window.addEventListener("load", () => {
+        const canvas = document.getElementById("performanceChart");
+        canvas.width = canvas.offsetWidth;
+        canvas.height = 320;
+        drawRadarChart();
+      });
+
+      // Redraw on resize
+      window.addEventListener("resize", () => {
+        const canvas = document.getElementById("performanceChart");
+        canvas.width = canvas.offsetWidth;
+        canvas.height = 320;
+        drawRadarChart();
+      });
+    </script>
+  </body>
+</html>

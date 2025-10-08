@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fee Structure</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white !important; }
+            .print-container { box-shadow: none !important; border: none !important; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+    <div class="max-w-6xl mx-auto p-4 md:p-6 lg:p-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center">
+                    <button onclick="goBack()" class="mr-4 p-2 hover:bg-gray-100 rounded-lg transition-colors no-print">
+                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-semibold text-gray-900">Fee Structure</h1>
+                        <div class="flex items-center mt-2">
+                            <span class="text-sm text-indigo-600 font-medium">6</span>
+                            <div class="w-12 h-1 bg-indigo-500 rounded-full ml-2"></div>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="printPage()" class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors no-print flex items-center">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                    </svg>
+                    Print
+                </button>
+            </div>
+        </div>
+
+        <!-- Student Info Card -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6 print-container">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <p class="text-xs font-medium text-gray-500 uppercase mb-1">Student Name</p>
+                    <p class="text-base font-semibold text-gray-900">John Michael Doe</p>
+                </div>
+                <div>
+                    <p class="text-xs font-medium text-gray-500 uppercase mb-1">Student ID</p>
+                    <p class="text-base font-semibold text-gray-900">STU-2025-1234</p>
+                </div>
+                <div>
+                    <p class="text-xs font-medium text-gray-500 uppercase mb-1">Class</p>
+                    <p class="text-base font-semibold text-gray-900">Grade 10 - Section A</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Academic Year Selector -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6 no-print">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Academic Year</label>
+            <select id="academicYear" onchange="changeAcademicYear()" class="w-full md:w-64 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                <option value="2025-2026" selected>2025-2026</option>
+                <option value="2024-2025">2024-2025</option>
+                <option value="2023-2024">2023-2024</option>
+            </select>
+        </div>
+
+        <!-- Semester Tabs -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-6 no-print">
+            <div class="flex border-b border-gray-200">
+                <button onclick="changeSemester('semester1')" id="tab-semester1" class="flex-1 px-6 py-4 text-sm font-medium text-blue-600 border-b-2 border-blue-600">
+                    Semester 1
+                </button>
+                <button onclick="changeSemester('semester2')" id="tab-semester2" class="flex-1 px-6 py-4 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent">
+                    Semester 2
+                </button>
+                <button onclick="changeSemester('annual')" id="tab-annual" class="flex-1 px-6 py-4 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent">
+                    Annual Fees
+                </button>
+            </div>
+        </div>
+
+        <!-- Fee Categories (Accordion) -->
+        <div class="space-y-4 mb-6" id="feeCategories">
+            <!-- Tuition Fees -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden print-container">
+                <button onclick="toggleCategory('tuition')" class="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors no-print">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-base font-semibold text-gray-900">Tuition Fees</h3>
+                            <p class="text-sm text-gray-500">Core academic instruction</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-lg font-bold text-gray-900 mr-4">$5,000.00</span>
+                        <span class="px-3 py-1 bg-green-50 text-green-700 text-xs font-medium rounded-full mr-4">Paid</span>
+                        <svg id="icon-tuition" class="w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                </button>
+                <div id="content-tuition" class="hidden px-6 py-4 border-t border-gray-100 bg-gray-50">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <p class="text-xs font-medium text-gray-500 uppercase mb-1">Due Date</p>
+                            <p class="text-sm text-gray-900">September 15, 2025</p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium text-gray-500 uppercase mb-1">Payment Date</p>
+                            <p class="text-sm text-gray-900">September 10, 2025</p>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-gray-500 uppercase mb-1">Description</p>
+                        <p class="text-sm text-gray-700">Covers all core academic subjects including Mathematics, Science, English, Social Studies, and elective courses for Semester 1.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Library Fees -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden print-container">
+                <button onclick="toggleCategory('library')" class="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors no-print">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center mr-4">
+                            <svg class="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-base font-semibold text-gray-900">Library Fees</h3>
+                            <p class="text-sm text-gray-500">Library resources and services</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-lg font-bold text-gray-900 mr-4">$150.00</span>
+                        <span class="px-3 py-1 bg-green-50 text-green-700 text-xs font-medium rounded-full mr-4">Paid</span>
+                        <svg id="icon-library" class="w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                </button>
+                <div id="content-library" class="hidden px-6 py-4 border-t border-gray-100 bg-gray-50">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <p class="text-xs font-medium text-gray-500 uppercase mb-1">Due Date</p>
+                            <p class="text-sm text-gray-900">September 20, 2025</p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium text-gray-500 uppercase mb-1">Payment Date</p>
+                            <p class="text-sm text-gray-900">September 12, 2025</p>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-gray-500 uppercase mb-1">Description</p>
+                        <p class="text-sm text-gray-700">Access to library books, digital resources, reference materials, and study spaces. Includes borrowing privileges for up to 5 books at a time.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Laboratory Fees -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden print-container">
+                <button onclick="toggleCategory('laboratory')" class="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors no-print">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-base font-semibold text-gray-900">Laboratory Fees</h3>
+                            <p class="text-sm text-gray-500">Science lab materials and equipment</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-lg font-bold text-gray-900 mr-4">$300.00</span>
+                        <span class="px-3 py-1 bg-orange-50 text-orange-700 text-xs font-medium rounded-full mr-4">Pending</span>
+                        <svg id="icon-laboratory" class="w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                </button>
+                <div id="content-laboratory" class="hidden px-6 py-4 border-t border-gray-100 bg-gray-50">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <p class="text-xs font-medium text-gray-500 uppercase mb-1">Due Date</p>
+                            <p class="text-sm text-orange-600 font-medium">October 05, 2025</p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium text-gray-500 uppercase mb-1">Payment Date</p>
+                            <p class="text-sm text-gray-500">Not paid yet</p>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-gray-500 uppercase mb-1">Description</p>
+                        <p class="text-sm text-gray-700">Chemistry, Physics, and Biology lab consumables, equipment usage, and practical session materials.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sports & Activities -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden print-container">
+                <button onclick="toggleCategory('sports')" class="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors no-print">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center mr-4">
+                            <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-base font-semibold text-gray-900">Sports & Activities</h3>
+                            <p class="text-sm text-gray-500">Sports facilities and extracurricular</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-lg font-bold text-gray-900 mr-4">$200.00</span>
+                        <span class="px-3 py-1 bg-orange-50 text-orange-700 text-xs font-medium rounded-full mr-4">Pending</span>
+                        <svg id="icon-sports" class="w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                </button>
+                <div id="content-sports" class="hidden px-6 py-4 border-t border-gray-100 bg-gray-50">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <p class="text-xs font-medium text-gray-500 uppercase mb-1">Due Date</p>
+                            <p class="text-sm text-orange-600 font-medium">October 15, 2025</p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium text-gray-500 uppercase mb-1">Payment Date</p>
+                            <p class="text-sm text-gray-500">Not paid yet</p>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-gray-500 uppercase mb-1">Description</p>
+                        <p class="text-sm text-gray-700">Sports facilities access, physical education equipment, intramural activities, and club memberships.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technology Fees -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden print-container">
+                <button onclick="toggleCategory('technology')" class="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors no-print">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center mr-4">
+                            <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-base font-semibold text-gray-900">Technology Fees</h3>
+                            <p class="text-sm text-gray-500">Computer labs and digital resources</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-lg font-bold text-gray-900 mr-4">$250.00</span>
+                        <span class="px-3 py-1 bg-orange-50 text-orange-700 text-xs font-medium rounded-full mr-4">Pending</span>
+                        <svg id="icon-technology" class="w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                </button>
+                <div id="content-technology" class="hidden px-6 py-4 border-t border-gray-100 bg-gray-50">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <p class="text-xs font-medium text-gray-500 uppercase mb-1">Due Date</p>
+                            <p class="text-sm text-orange-600 font-medium">October 10, 2025</p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium text-gray-500 uppercase mb-1">Payment Date</p>
+                            <p class="text-sm text-gray-500">Not paid yet</p>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-gray-500 uppercase mb-1">Description</p>
+                        <p class="text-sm text-gray-700">Computer lab access, software licenses, LMS platform, WiFi access, and technical support services.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exam Fees -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden print-container">
+                <button onclick="toggleCategory('exam')" class="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors no-print">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
+                            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-base font-semibold text-gray-900">Exam Fees</h3>
+                            <p class="text-sm text-gray-500">Mid-term and final examinations</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-lg font-bold text-gray-900 mr-4">$100.00</span>
+                        <span class="px-3 py-1 bg-red-50 text-red-700 text-xs font-medium rounded-full mr-4">Overdue</span>
+                        <svg id="icon-exam" class="w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                </button>
+                <div id="content-exam" class="hidden px-6 py-4 border-t border-gray-100 bg-gray-50">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <p class="text-xs font-medium text-gray-500 uppercase mb-1">Due Date</p>
+                            <p class="text-sm text-red-600 font-medium">September 30, 2025 (Overdue)</p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium text-gray-500 uppercase mb-1">Payment Date</p>
+                            <p class="text-sm text-gray-500">Not paid yet</p>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <p class="text-xs font-medium text-gray-500 uppercase mb-1">Description</p>
+                        <p class="text-sm text-gray-700">Registration and administration for mid-term and final semester examinations. Required for exam eligibility.</p>
+                    </div>
+                    <div class="bg-red-50 border-l-4 border-red-500 p-3 rounded">
+                        <p class="text-sm text-red-700 font-medium">⚠️ Payment overdue. Please pay immediately to avoid exam registration issues.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Miscellaneous -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden print-container">
+                <button onclick="toggleCategory('miscellaneous')" class="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors no-print">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center mr-4">
+                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-base font-semibold text-gray-900">Miscellaneous</h3>
+                            <p class="text-sm text-gray-500">Other fees and charges</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-lg font-bold text-gray-900 mr-4">$100.00</span>
+                        <span class="px-3 py-1 bg-green-50 text-green-700 text-xs font-medium rounded-full mr-4">Paid</span>
+                        <svg id="icon-miscellaneous" class="w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                </button>
+                <div id="content-miscellaneous" class="hidden px-6 py-4 border-t border-gray-100 bg-gray-50">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <p class="text-xs font-medium text-gray-500 uppercase mb-1">Due Date</p>
+                            <p class="text-sm text-gray-900">September 25, 2025</p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium text-gray-500 uppercase mb-1">Payment Date</p>
+                            <p class="text-sm text-gray-900">September 20, 2025</p>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-gray-500 uppercase mb-1">Description</p>
+                        <p class="text-sm text-gray-700">ID card, student handbook, insurance, locker rental, and other miscellaneous charges.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Summary Card -->
+        <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl shadow-lg p-6 md:p-8 mb-6 print-container">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <p class="text-blue-100 text-sm font-medium mb-2">Total Fees</p>
+                    <p class="text-white text-3xl font-bold">$6,100.00</p>
+                </div>
+                <div>
+                    <p class="text-blue-100 text-sm font-medium mb-2">Amount Paid</p>
+                    <p class="text-white text-3xl font-bold">$5,250.00</p>
+                    <div class="w-full bg-blue-400 rounded-full h-2 mt-3">
+                        <div class="bg-white h-2 rounded-full" style="width: 86%"></div>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-blue-100 text-sm font-medium mb-2">Outstanding Balance</p>
+                    <p class="text-white text-3xl font-bold">$850.00</p>
+                    <button onclick="payNow()" class="mt-3 w-full px-4 py-2 bg-white text-blue-600 text-sm font-medium rounded-lg hover:bg-blue-50 transition-colors no-print">
+                        Pay Now
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Installment Options -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 md:p-8 print-container">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-semibold text-gray-900">Installment Plan</h2>
+                <span class="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-full">Available</span>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Installment 1 -->
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-sm font-medium text-gray-500">Installment 1</span>
+                        <span class="px-2 py-1 bg-green-50 text-green-700 text-xs font-medium rounded-full">Paid</span>
+                    </div>
+                    <p class="text-2xl font-bold text-gray-900 mb-2">$2,033.33</p>
+                    <p class="text-xs text-gray-500">Due: Sep 15, 2025</p>
+                    <p class="text-xs text-green-600 font-medium mt-1">Paid: Sep 10, 2025</p>
+                </div>
+
+                <!-- Installment 2 -->
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-sm font-medium text-gray-500">Installment 2</span>
+                        <span class="px-2 py-1 bg-orange-50 text-orange-700 text-xs font-medium rounded-full">Pending</span>
+                    </div>
+                    <p class="text-2xl font-bold text-gray-900 mb-2">$2,033.33</p>
+                    <p class="text-xs text-gray-500">Due: Oct 15, 2025</p>
+                    <button onclick="payInstallment(2)" class="mt-3 w-full px-3 py-1.5 bg-blue-600 text-white text-xs font-medium rounded-md hover:bg-blue-700 transition-colors no-print">
+                        Pay Now
+                    </button>
+                </div>
+
+                <!-- Installment 3 -->
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-sm font-medium text-gray-500">Installment 3</span>
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full">Upcoming</span>
+                    </div>
+                    <p class="text-2xl font-bold text-gray-900 mb-2">$2,033.34</p>
+                    <p class="text-xs text-gray-500">Due: Nov 15, 2025</p>
+                </div>
+            </div>
+
+            <div class="mt-6 p-4 bg-blue-50 border border-blue-100 rounded-lg">
+                <div class="flex">
+                    <svg class="w-5 h-5 text-blue-600 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <div>
+                        <p class="text-sm font-medium text-blue-900 mb-1">Installment Plan Details</p>
+                        <p class="text-xs text-blue-700">Fees are divided into 3 equal installments. Late payment may incur a 2% monthly penalty. Contact the finance office for payment plan modifications.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle accordion categories
+        function toggleCategory(category) {
+            const content = document.getElementById(`content-${category}`);
+            const icon = document.getElementById(`icon-${category}`);
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Change semester tab
+        function changeSemester(semester) {
+            // Remove active state from all tabs
+            document.querySelectorAll('[id^="tab-"]').forEach(tab => {
+                tab.classList.remove('text-blue-600', 'border-blue-600');
+                tab.classList.add('text-gray-500', 'border-transparent');
+            });
+
+            // Add active state to selected tab
+            const activeTab = document.getElementById(`tab-${semester}`);
+            activeTab.classList.remove('text-gray-500', 'border-transparent');
+            activeTab.classList.add('text-blue-600', 'border-blue-600');
+
+            console.log(`Switched to ${semester}`);
+        }
+
+        // Change academic year
+        function changeAcademicYear() {
+            const year = document.getElementById('academicYear').value;
+            console.log(`Changed academic year to ${year}`);
+            // In a real app, this would fetch new fee data
+        }
+
+        // Go back function
+        function goBack() {
+            console.log('Navigate back to dashboard');
+            // In a real app, this would navigate back
+            window.history.back();
+        }
+
+        // Print page
+        function printPage() {
+            window.print();
+        }
+
+        // Pay now button
+        function payNow() {
+            console.log('Navigate to payment page');
+            alert('Redirecting to payment page...');
+            // In a real app, this would navigate to payment page with outstanding balance
+        }
+
+        // Pay installment
+        function payInstallment(number) {
+            console.log(`Pay installment ${number}`);
+            alert(`Redirecting to payment page for Installment ${number}...`);
+            // In a real app, this would navigate to payment page with specific installment
+        }
+
+        // Add smooth transitions on load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add animation classes
+            const cards = document.querySelectorAll('.bg-white');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    card.style.transition = 'all 0.3s ease-out';
+                    
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 50);
+                }, index * 50);
+            });
+        });
+    </script>
+</body>
+</html>

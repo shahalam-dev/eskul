@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LMS Dashboard</title>
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .gradient-blue {
+            background: linear-gradient(135deg, #667eea 0%, #4c9aff 100%);
+        }
+        
+        .gradient-pink {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .gradient-green {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .gradient-orange {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+        
+        .island-nav {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .island-nav > div {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        .island-nav > div::-webkit-scrollbar {
+            display: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .progress-ring {
+            transition: stroke-dashoffset 0.5s ease;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 min-h-screen">
+    
+    <!-- Island Navigation -->
+    <nav class="island-nav fixed top-4 md:top-6 left-1/2 transform -translate-x-1/2 z-50 w-11/12 md:w-auto">
+        <div class="glass-card rounded-full px-4 md:px-8 py-3 md:py-4 flex items-center gap-2 md:gap-6 shadow-xl overflow-x-auto">
+            <button onclick="setActiveNav('dashboard')" id="nav-dashboard" class="nav-btn px-4 md:px-6 py-2 rounded-full font-medium transition-all bg-purple-600 text-white text-sm md:text-base whitespace-nowrap">
+                Dashboard
+            </button>
+            <button onclick="setActiveNav('courses')" id="nav-courses" class="nav-btn px-4 md:px-6 py-2 rounded-full font-medium transition-all text-gray-700 hover:bg-white/50 text-sm md:text-base whitespace-nowrap">
+                Courses
+            </button>
+            <button onclick="setActiveNav('assignments')" id="nav-assignments" class="nav-btn px-4 md:px-6 py-2 rounded-full font-medium transition-all text-gray-700 hover:bg-white/50 text-sm md:text-base whitespace-nowrap">
+                Assignments
+            </button>
+            <button onclick="setActiveNav('grades')" id="nav-grades" class="nav-btn px-4 md:px-6 py-2 rounded-full font-medium transition-all text-gray-700 hover:bg-white/50 text-sm md:text-base whitespace-nowrap">
+                Grades
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 md:px-6 pt-24 md:pt-32 pb-12">
+        
+        <!-- Welcome Section -->
+        <div class="mb-8 md:mb-12">
+            <h1 class="text-3xl md:text-5xl font-bold text-gray-800 mb-2">Welcome back, Alex! 👋</h1>
+            <p class="text-base md:text-xl text-gray-600">Let's continue your learning journey</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8 md:mb-12">
+            <!-- Active Courses -->
+            <div class="card-hover glass-card rounded-2xl md:rounded-3xl p-4 md:p-6 shadow-lg">
+                <div class="gradient-blue w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center mb-3 md:mb-4">
+                    <svg class="w-5 h-5 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                </div>
+                <h3 class="text-2xl md:text-3xl font-bold text-gray-800 mb-1">6</h3>
+                <p class="text-xs md:text-sm text-gray-600 font-medium">Active Courses</p>
+            </div>
+
+            <!-- Assignments Due -->
+            <div class="card-hover glass-card rounded-2xl md:rounded-3xl p-4 md:p-6 shadow-lg">
+                <div class="gradient-pink w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center mb-3 md:mb-4">
+                    <svg class="w-5 h-5 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                    </svg>
+                </div>
+                <h3 class="text-2xl md:text-3xl font-bold text-gray-800 mb-1">3</h3>
+                <p class="text-xs md:text-sm text-gray-600 font-medium">Due This Week</p>
+            </div>
+
+            <!-- Average Grade -->
+            <div class="card-hover glass-card rounded-2xl md:rounded-3xl p-4 md:p-6 shadow-lg">
+                <div class="gradient-green w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center mb-3 md:mb-4">
+                    <svg class="w-5 h-5 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-2xl md:text-3xl font-bold text-gray-800 mb-1">92%</h3>
+                <p class="text-xs md:text-sm text-gray-600 font-medium">Average Grade</p>
+            </div>
+
+            <!-- Study Streak -->
+            <div class="card-hover glass-card rounded-2xl md:rounded-3xl p-4 md:p-6 shadow-lg">
+                <div class="gradient-orange w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center mb-3 md:mb-4">
+                    <svg class="w-5 h-5 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-2xl md:text-3xl font-bold text-gray-800 mb-1">12</h3>
+                <p class="text-xs md:text-sm text-gray-600 font-medium">Day Streak 🔥</p>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+            
+            <!-- Left Column - Course Progress -->
+            <div class="lg:col-span-2 space-y-4 md:space-y-6">
+                <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-4">Continue Learning</h2>
+                
+                <!-- Course Card 1 -->
+                <div class="card-hover glass-card rounded-2xl md:rounded-3xl p-4 md:p-6 shadow-lg">
+                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4 gap-3">
+                        <div class="flex items-start gap-3 md:gap-4 w-full sm:w-auto">
+                            <div class="gradient-blue w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl flex items-center justify-center text-white text-lg md:text-xl font-bold flex-shrink-0">
+                                WD
+                            </div>
+                            <div class="flex-1 sm:flex-initial">
+                                <h3 class="text-base md:text-xl font-bold text-gray-800">Web Development Fundamentals</h3>
+                                <p class="text-sm md:text-base text-gray-600">Prof. Sarah Johnson</p>
+                            </div>
+                        </div>
+                        <span class="bg-blue-100 text-blue-800 px-3 md:px-4 py-1 rounded-full text-xs md:text-sm font-medium whitespace-nowrap">In Progress</span>
+                    </div>
+                    <div class="mb-3">
+                        <div class="flex justify-between text-xs md:text-sm mb-2">
+                            <span class="text-gray-600 font-medium">Progress</span>
+                            <span class="text-gray-800 font-bold">68%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2 md:h-3">
+                            <div class="gradient-blue h-2 md:h-3 rounded-full transition-all duration-500" style="width: 68%"></div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-xs md:text-sm mb-4">Next: Module 7 - JavaScript Fundamentals</p>
+                    <button class="gradient-blue text-white px-5 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl font-medium hover:shadow-lg transition-all text-sm md:text-base w-full sm:w-auto">
+                        Continue Learning
+                    </button>
+                </div>
+
+                <!-- Course Card 2 -->
+                <div class="card-hover glass-card rounded-2xl md:rounded-3xl p-4 md:p-6 shadow-lg">
+                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4 gap-3">
+                        <div class="flex items-start gap-3 md:gap-4 w-full sm:w-auto">
+                            <div class="gradient-pink w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl flex items-center justify-center text-white text-lg md:text-xl font-bold flex-shrink-0">
+                                DS
+                            </div>
+                            <div class="flex-1 sm:flex-initial">
+                                <h3 class="text-base md:text-xl font-bold text-gray-800">Data Structures & Algorithms</h3>
+                                <p class="text-sm md:text-base text-gray-600">Prof. Michael Chen</p>
+                            </div>
+                        </div>
+                        <span class="bg-pink-100 text-pink-800 px-3 md:px-4 py-1 rounded-full text-xs md:text-sm font-medium whitespace-nowrap">In Progress</span>
+                    </div>
+                    <div class="mb-3">
+                        <div class="flex justify-between text-xs md:text-sm mb-2">
+                            <span class="text-gray-600 font-medium">Progress</span>
+                            <span class="text-gray-800 font-bold">45%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2 md:h-3">
+                            <div class="gradient-pink h-2 md:h-3 rounded-full transition-all duration-500" style="width: 45%"></div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-xs md:text-sm mb-4">Next: Binary Trees & Traversal</p>
+                    <button class="gradient-pink text-white px-5 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl font-medium hover:shadow-lg transition-all text-sm md:text-base w-full sm:w-auto">
+                        Continue Learning
+                    </button>
+                </div>
+
+                <!-- Course Card 3 -->
+                <div class="card-hover glass-card rounded-2xl md:rounded-3xl p-4 md:p-6 shadow-lg">
+                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4 gap-3">
+                        <div class="flex items-start gap-3 md:gap-4 w-full sm:w-auto">
+                            <div class="gradient-green w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl flex items-center justify-center text-white text-lg md:text-xl font-bold flex-shrink-0">
+                                UI
+                            </div>
+                            <div class="flex-1 sm:flex-initial">
+                                <h3 class="text-base md:text-xl font-bold text-gray-800">UI/UX Design Principles</h3>
+                                <p class="text-sm md:text-base text-gray-600">Prof. Emily Watson</p>
+                            </div>
+                        </div>
+                        <span class="bg-green-100 text-green-800 px-3 md:px-4 py-1 rounded-full text-xs md:text-sm font-medium whitespace-nowrap">In Progress</span>
+                    </div>
+                    <div class="mb-3">
+                        <div class="flex justify-between text-xs md:text-sm mb-2">
+                            <span class="text-gray-600 font-medium">Progress</span>
+                            <span class="text-gray-800 font-bold">82%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2 md:h-3">
+                            <div class="gradient-green h-2 md:h-3 rounded-full transition-all duration-500" style="width: 82%"></div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-xs md:text-sm mb-4">Next: Design Systems & Components</p>
+                    <button class="gradient-green text-white px-5 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl font-medium hover:shadow-lg transition-all text-sm md:text-base w-full sm:w-auto">
+                        Continue Learning
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Column - Notifications & Quick Actions -->
+            <div class="space-y-4 md:space-y-6">
+                <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-4">Updates</h2>
+                
+                <!-- Notifications Section -->
+                <div class="glass-card rounded-2xl md:rounded-3xl p-4 md:p-6 shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-base md:text-lg font-bold text-gray-800">Notifications</h3>
+                        <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs font-medium">5 New</span>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <!-- Notification 1 -->
+                        <div class="flex gap-3 p-3 bg-white/50 rounded-xl md:rounded-2xl hover:bg-white/70 transition-all cursor-pointer">
+                            <div class="bg-blue-100 w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h4 class="font-semibold text-gray-800 text-xs md:text-sm">Assignment Graded</h4>
+                                <p class="text-xs text-gray-600 truncate">Your JavaScript project received an A</p>
+                                <p class="text-xs text-gray-400 mt-1">2 hours ago</p>
+                            </div>
+                        </div>
+
+                        <!-- Notification 2 -->
+                        <div class="flex gap-3 p-3 bg-white/50 rounded-xl md:rounded-2xl hover:bg-white/70 transition-all cursor-pointer">
+                            <div class="bg-purple-100 w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h4 class="font-semibold text-gray-800 text-xs md:text-sm">New Content Available</h4>
+                                <p class="text-xs text-gray-600 truncate">Module 8 has been uploaded</p>
+                                <p class="text-xs text-gray-400 mt-1">5 hours ago</p>
+                            </div>
+                        </div>
+
+                        <!-- Notification 3 -->
+                        <div class="flex gap-3 p-3 bg-white/50 rounded-xl md:rounded-2xl hover:bg-white/70 transition-all cursor-pointer">
+                            <div class="bg-pink-100 w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h4 class="font-semibold text-gray-800 text-xs md:text-sm">Deadline Reminder</h4>
+                                <p class="text-xs text-gray-600 truncate">Algorithm quiz due in 2 days</p>
+                                <p class="text-xs text-gray-400 mt-1">1 day ago</p>
+                            </div>
+                        </div>
+
+                        <!-- Notification 4 -->
+                        <div class="flex gap-3 p-3 bg-white/50 rounded-xl md:rounded-2xl hover:bg-white/70 transition-all cursor-pointer">
+                            <div class="bg-green-100 w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h4 class="font-semibold text-gray-800 text-xs md:text-sm">New Message</h4>
+                                <p class="text-xs text-gray-600 truncate">Prof. Johnson replied to your question</p>
+                                <p class="text-xs text-gray-400 mt-1">1 day ago</p>
+                            </div>
+                        </div>
+
+                        <!-- Notification 5 -->
+                        <div class="flex gap-3 p-3 bg-white/50 rounded-xl md:rounded-2xl hover:bg-white/70 transition-all cursor-pointer">
+                            <div class="bg-orange-100 w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h4 class="font-semibold text-gray-800 text-xs md:text-sm">Achievement Unlocked</h4>
+                                <p class="text-xs text-gray-600 truncate">7-day study streak completed!</p>
+                                <p class="text-xs text-gray-400 mt-1">2 days ago</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="w-full mt-4 text-purple-600 font-medium text-xs md:text-sm hover:text-purple-700 transition-all">
+                        View All Notifications
+                    </button>
+                </div>
+                
+                <!-- Upcoming Assignments -->
+                <div class="glass-card rounded-2xl md:rounded-3xl p-4 md:p-6 shadow-lg">
+                    <h3 class="text-base md:text-lg font-bold text-gray-800 mb-4">Due Soon</h3>
+                    
+                    <div class="space-y-3 md:space-y-4">
+                        <div class="flex gap-3 p-3 bg-white/50 rounded-xl md:rounded-2xl">
+                            <div class="bg-red-100 w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center text-red-600 font-bold flex-shrink-0 text-sm md:text-base">
+                                03
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h4 class="font-semibold text-gray-800 text-xs md:text-sm">JavaScript Project</h4>
+                                <p class="text-xs text-gray-600">Due in 3 days</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-3 p-3 bg-white/50 rounded-xl md:rounded-2xl">
+                            <div class="bg-orange-100 w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center text-orange-600 font-bold flex-shrink-0 text-sm md:text-base">
+                                05
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h4 class="font-semibold text-gray-800 text-xs md:text-sm">Algorithm Quiz</h4>
+                                <p class="text-xs text-gray-600">Due in 5 days</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-3 p-3 bg-white/50 rounded-xl md:rounded-2xl">
+                            <div class="bg-blue-100 w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center text-blue-600 font-bold flex-shrink-0 text-sm md:text-base">
+                                07
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h4 class="font-semibold text-gray-800 text-xs md:text-sm">Design Portfolio</h4>
+                                <p class="text-xs text-gray-600">Due in 7 days</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="glass-card rounded-2xl md:rounded-3xl p-4 md:p-6 shadow-lg">
+                    <h3 class="text-base md:text-lg font-bold text-gray-800 mb-4">Quick Actions</h3>
+                    
+                    <div class="space-y-2 md:space-y-3">
+                        <button class="w-full bg-white hover:bg-gray-50 p-3 md:p-4 rounded-xl md:rounded-2xl flex items-center gap-3 transition-all">
+                            <div class="gradient-blue w-9 h-9 md:w-10 md:h-10 rounded-xl flex items-center justify-center">
+                                <svg class="w-4 h-4 md:w-5 md:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <span class="font-medium text-gray-800 text-xs md:text-sm">View Calendar</span>
+                        </button>
+
+                        <button class="w-full bg-white hover:bg-gray-50 p-3 md:p-4 rounded-xl md:rounded-2xl flex items-center gap-3 transition-all">
+                            <div class="gradient-pink w-9 h-9 md:w-10 md:h-10 rounded-xl flex items-center justify-center">
+                                <svg class="w-4 h-4 md:w-5 md:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path>
+                                </svg>
+                            </div>
+                            <span class="font-medium text-gray-800 text-xs md:text-sm">Messages</span>
+                        </button>
+
+                        <button class="w-full bg-white hover:bg-gray-50 p-3 md:p-4 rounded-xl md:rounded-2xl flex items-center gap-3 transition-all">
+                            <div class="gradient-green w-9 h-9 md:w-10 md:h-10 rounded-xl flex items-center justify-center">
+                                <svg class="w-4 h-4 md:w-5 md:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                </svg>
+                            </div>
+                            <span class="font-medium text-gray-800 text-xs md:text-sm">Resources</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Study Time Today -->
+                <div class="glass-card rounded-2xl md:rounded-3xl p-4 md:p-6 shadow-lg text-center">
+                    <div class="gradient-orange w-16 h-16 md:w-20 md:h-20 rounded-full mx-auto mb-3 md:mb-4 flex items-center justify-center">
+                        <svg class="w-8 h-8 md:w-10 md:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl md:text-3xl font-bold text-gray-800 mb-1">2h 34m</h3>
+                    <p class="text-sm md:text-base text-gray-600">Study time today</p>
+                    <p class="text-xs md:text-sm text-green-600 font-medium mt-2">+18% from yesterday</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function setActiveNav(section) {
+            // Remove active state from all buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-purple-600', 'text-white');
+                btn.classList.add('text-gray-700');
+            });
+            
+            // Add active state to clicked button
+            const activeBtn = document.getElementById(`nav-${section}`);
+            activeBtn.classList.add('bg-purple-600', 'text-white');
+            activeBtn.classList.remove('text-gray-700');
+            
+            // Here you would typically load different content based on the section
+            console.log(`Navigated to: ${section}`);
+        }
+    </script>
+</body>
+</html>
