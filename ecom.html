@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order - EmbroideredCotton</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        .product-card {
+            transition: all 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-2px);
+        }
+        .selected {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header with Logo -->
+    <div class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-center">
+                <div class="w-12 h-12 bg-orange-400 rounded-lg flex items-center justify-center">
+                    <div class="grid grid-cols-2 gap-1">
+                        <div class="w-2 h-2 bg-white rounded-sm"></div>
+                        <div class="w-2 h-2 bg-white rounded-sm"></div>
+                        <div class="w-2 h-2 bg-white rounded-sm"></div>
+                        <div class="w-2 h-2 bg-white rounded-sm"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Product Selection Grid -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <!-- Product 1 - Selected -->
+            <div class="product-card bg-white border-2 border-blue-500 rounded-lg p-4 cursor-pointer selected" onclick="toggleProduct(this)">
+                <div class="flex justify-between items-start mb-3">
+                    <div class="w-5 h-5 bg-blue-500 rounded border-2 border-blue-500 flex items-center justify-center">
+                        <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <div class="text-gray-400">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <div class="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center mb-2">
+                        <div class="text-6xl">👔</div>
+                    </div>
+                </div>
+                <h3 class="font-medium text-gray-800 mb-2">EmbroideredCotton</h3>
+                <div class="flex items-center space-x-2">
+                    <span class="text-gray-400 line-through text-sm">Tk 2,835.00</span>
+                    <span class="text-orange-500 font-semibold">Tk 1,147.50</span>
+                </div>
+            </div>
+
+            <!-- Product 2 - Selected -->
+            <div class="product-card bg-white border-2 border-blue-500 rounded-lg p-4 cursor-pointer selected" onclick="toggleProduct(this)">
+                <div class="flex justify-between items-start mb-3">
+                    <div class="w-5 h-5 bg-blue-500 rounded border-2 border-blue-500 flex items-center justify-center">
+                        <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <div class="text-gray-400">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <div class="w-full h-32 bg-red-100 rounded-lg flex items-center justify-center mb-2">
+                        <div class="text-6xl text-red-600">👔</div>
+                    </div>
+                </div>
+                <h3 class="font-medium text-gray-800 mb-2">EmbroideredCotton</h3>
+                <div class="flex items-center space-x-2">
+                    <span class="text-gray-400 line-through text-sm">Tk 2,835.00</span>
+                    <span class="text-orange-500 font-semibold">Tk 1,147.50</span>
+                </div>
+            </div>
+
+            <!-- Product 3 - Unselected -->
+            <div class="product-card bg-white border-2 border-gray-200 rounded-lg p-4 cursor-pointer" onclick="toggleProduct(this)">
+                <div class="flex justify-between items-start mb-3">
+                    <div class="w-5 h-5 bg-white rounded border-2 border-gray-300"></div>
+                    <div class="text-gray-400">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <div class="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center mb-2">
+                        <div class="text-6xl">👔</div>
+                    </div>
+                </div>
+                <h3 class="font-medium text-gray-800 mb-2">EmbroideredCotton</h3>
+                <div class="flex items-center space-x-2">
+                    <span class="text-gray-400 line-through text-sm">Tk 2,835.00</span>
+                    <span class="text-orange-500 font-semibold">Tk 1,147.50</span>
+                </div>
+            </div>
+
+            <!-- Product 4 - Unselected -->
+            <div class="product-card bg-white border-2 border-gray-200 rounded-lg p-4 cursor-pointer" onclick="toggleProduct(this)">
+                <div class="flex justify-between items-start mb-3">
+                    <div class="w-5 h-5 bg-white rounded border-2 border-gray-300"></div>
+                    <div class="text-gray-400">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7-682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <div class="w-full h-32 bg-red-100 rounded-lg flex items-center justify-center mb-2">
+                        <div class="text-6xl text-red-600">👔</div>
+                    </div>
+                </div>
+                <h3 class="font-medium text-gray-800 mb-2">EmbroideredCotton</h3>
+                <div class="flex items-center space-x-2">
+                    <span class="text-gray-400 line-through text-sm">Tk 2,835.00</span>
+                    <span class="text-orange-500 font-semibold">Tk 1,147.50</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="grid lg:grid-cols-2 gap-8">
+            <!-- Left Column -->
+            <div class="space-y-6">
+                <!-- Product Details Section -->
+                <div class="bg-white rounded-lg shadow-sm">
+                    <div class="bg-gray-800 text-white p-4 rounded-t-lg">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-white text-gray-800 rounded-full flex items-center justify-center font-bold">1</div>
+                            <h2 class="text-lg font-semibold">Product Details</h2>
+                        </div>
+                    </div>
+                    <div class="p-4 space-y-4">
+                        <div class="border-b pb-4">
+                            <button class="flex items-center justify-between w-full text-left" onclick="toggleDropdown('description')">
+                                <span class="font-medium text-gray-700">Description</span>
+                                <svg id="description-icon" class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div id="description-content" class="mt-2 text-gray-600 text-sm hidden">
+                                High-quality embroidered cotton garments with traditional designs. Made from 100% cotton fabric with intricate embroidery work.
+                            </div>
+                        </div>
+                        <div>
+                            <button class="flex items-center justify-between w-full text-left" onclick="toggleDropdown('washguide')">
+                                <span class="font-medium text-gray-700">Wash Guide</span>
+                                <svg id="washguide-icon" class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div id="washguide-content" class="mt-2 text-gray-600 text-sm hidden">
+                                Machine wash cold with like colors. Do not bleach. Tumble dry low. Iron on medium heat if needed.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Billing Details Section -->
+                <div class="bg-white rounded-lg shadow-sm">
+                    <div class="bg-gray-800 text-white p-4 rounded-t-lg">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-white text-gray-800 rounded-full flex items-center justify-center font-bold">2</div>
+                            <h2 class="text-lg font-semibold">Billing Details</h2>
+                        </div>
+                    </div>
+                    <div class="p-4 space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input type="text" placeholder="type your name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <input type="tel" placeholder="phone number" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        <textarea placeholder="type your full address" rows="3" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div>
+                <!-- Order Review Section -->
+                <div class="bg-white rounded-lg shadow-sm">
+                    <div class="bg-gray-800 text-white p-4 rounded-t-lg">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-white text-gray-800 rounded-full flex items-center justify-center font-bold">3</div>
+                            <h2 class="text-lg font-semibold">Order Review</h2>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between text-sm text-gray-600 mb-4 border-b pb-2">
+                            <span>PRODUCT</span>
+                            <span>SUBTOTAL</span>
+                        </div>
+
+                        <!-- Product Items -->
+                        <div class="space-y-4 mb-6">
+                            <!-- Item 1 -->
+                            <div class="flex items-start space-x-3 pb-4 border-b">
+                                <div class="w-12 h-12 bg-gray-100 rounded flex items-center justify-center flex-shrink-0">
+                                    <span class="text-2xl">👔</span>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="font-medium text-gray-800">EmbroideredCotton</h4>
+                                    <div class="flex items-center space-x-2 mt-1">
+                                        <span class="text-sm text-gray-500">Size:</span>
+                                        <div class="flex space-x-1">
+                                            <button class="px-2 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50">42</button>
+                                            <button class="px-2 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50">43</button>
+                                            <button class="px-2 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50">44</button>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-3 mt-2">
+                                        <span class="text-sm text-gray-500">Quantity:</span>
+                                        <div class="flex items-center border border-gray-300 rounded">
+                                            <button class="px-2 py-1 hover:bg-gray-50" onclick="updateQuantity(this, -1)">−</button>
+                                            <span class="px-3 py-1 text-sm">1</span>
+                                            <button class="px-2 py-1 hover:bg-gray-50" onclick="updateQuantity(this, 1)">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-sm font-medium">Tk 1,147.50</div>
+                            </div>
+
+                            <!-- Item 2 -->
+                            <div class="flex items-start space-x-3 pb-4 border-b">
+                                <div class="w-12 h-12 bg-red-100 rounded flex items-center justify-center flex-shrink-0">
+                                    <span class="text-2xl text-red-600">👔</span>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="font-medium text-gray-800">EmbroideredCotton</h4>
+                                    <div class="flex items-center space-x-2 mt-1">
+                                        <span class="text-sm text-gray-500">Size:</span>
+                                        <div class="flex space-x-1">
+                                            <button class="px-2 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50">42</button>
+                                            <button class="px-2 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50">43</button>
+                                            <button class="px-2 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50">44</button>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-3 mt-2">
+                                        <span class="text-sm text-gray-500">Quantity:</span>
+                                        <div class="flex items-center border border-gray-300 rounded">
+                                            <button class="px-2 py-1 hover:bg-gray-50" onclick="updateQuantity(this, -1)">−</button>
+                                            <span class="px-3 py-1 text-sm">1</span>
+                                            <button class="px-2 py-1 hover:bg-gray-50" onclick="updateQuantity(this, 1)">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-sm font-medium">Tk 1,147.50</div>
+                            </div>
+                        </div>
+
+                        <!-- Order Summary -->
+                        <div class="space-y-3">
+                            <div class="flex justify-between text-sm">
+                                <span>SUBTOTAL</span>
+                                <span class="font-medium">Tk 2,295</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span>Shipping</span>
+                                <span class="font-medium">Tk 70</span>
+                            </div>
+
+                            <!-- Shipping Options -->
+                            <div class="space-y-2 py-3">
+                                <label class="flex items-center space-x-3 cursor-pointer">
+                                    <input type="radio" name="shipping" value="inside" checked class="w-4 h-4 text-blue-600">
+                                    <span class="text-sm">Inside Dhaka:</span>
+                                    <span class="text-sm font-medium ml-auto">70TK</span>
+                                </label>
+                                <label class="flex items-center space-x-3 cursor-pointer">
+                                    <input type="radio" name="shipping" value="outside" class="w-4 h-4 text-blue-600">
+                                    <span class="text-sm">Outside Dhaka:</span>
+                                    <span class="text-sm font-medium ml-auto">130TK</span>
+                                </label>
+                            </div>
+
+                            <div class="flex justify-between text-lg font-bold pt-3 border-t">
+                                <span>TOTAL</span>
+                                <span>2,365Tk</span>
+                            </div>
+                        </div>
+
+                        <!-- Payment Method -->
+                        <div class="mt-6 pt-4 border-t">
+                            <div class="text-sm text-gray-600 mb-4">Cash On Delivery</div>
+                        </div>
+
+                        <!-- Place Order Button -->
+                        <button class="w-full bg-gray-800 text-white py-4 rounded-lg font-semibold text-lg hover:bg-gray-900 transition-colors">
+                            PLACE ORDER
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleProduct(element) {
+            const checkbox = element.querySelector('.w-5.h-5');
+            const isSelected = element.classList.contains('selected');
+            
+            if (isSelected) {
+                element.classList.remove('selected', 'border-blue-500');
+                element.classList.add('border-gray-200');
+                checkbox.classList.remove('bg-blue-500', 'border-blue-500');
+                checkbox.classList.add('bg-white', 'border-gray-300');
+                checkbox.innerHTML = '';
+            } else {
+                element.classList.add('selected', 'border-blue-500');
+                element.classList.remove('border-gray-200');
+                checkbox.classList.add('bg-blue-500', 'border-blue-500');
+                checkbox.classList.remove('bg-white', 'border-gray-300');
+                checkbox.innerHTML = '<svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>';
+            }
+        }
+
+        function toggleDropdown(type) {
+            const content = document.getElementById(type + '-content');
+            const icon = document.getElementById(type + '-icon');
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                content.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        }
+
+        function updateQuantity(button, change) {
+            const quantitySpan = button.parentNode.querySelector('span');
+            let currentQuantity = parseInt(quantitySpan.textContent);
+            let newQuantity = Math.max(1, currentQuantity + change);
+            quantitySpan.textContent = newQuantity;
+            
+            // Update pricing would go here
+            updateTotals();
+        }
+
+        function updateTotals() {
+            // This would calculate and update the order totals
+            // For this demo, we'll keep static values
+        }
+
+        // Handle shipping option changes
+        document.addEventListener('change', function(e) {
+            if (e.target.name === 'shipping') {
+                const shippingCost = e.target.value === 'inside' ? 70 : 130;
+                const subtotal = 2295;
+                const total = subtotal + shippingCost;
+                
+                // Update shipping cost display
+                document.querySelector('.space-y-3 .flex:nth-child(2) span:last-child').textContent = `Tk ${shippingCost}`;
+                
+                // Update total
+                document.querySelector('.text-lg.font-bold span:last-child').textContent = `${total}Tk`;
+            }
+        });
+    </script>
+</body>
+</html>

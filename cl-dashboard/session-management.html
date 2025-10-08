@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session Management</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+    <div class="max-w-6xl mx-auto p-8">
+        <!-- Page Header -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h1 class="text-2xl font-semibold text-gray-900">Session Management</h1>
+                    <p class="text-sm text-gray-500 mt-1">Define and manage academic sessions and terms</p>
+                </div>
+                <button onclick="openAddModal()" class="flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Add Session
+                </button>
+            </div>
+            <div class="w-12 h-1 bg-purple-500 rounded-full"></div>
+        </div>
+
+        <!-- Active Session Banner -->
+        <div id="activeBanner" class="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl p-6 mb-8" style="display: none;">
+            <!-- Active session will be rendered here -->
+        </div>
+
+        <!-- Session Timeline -->
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm">
+            <div class="p-6 border-b border-gray-200">
+                <h2 class="text-xl font-semibold text-gray-900">All Sessions</h2>
+                <p class="text-sm text-gray-500 mt-1">Manage all academic sessions and terms</p>
+            </div>
+
+            <div id="sessionsList" class="divide-y divide-gray-100">
+                <!-- Sessions will be rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Session Modal -->
+    <div id="sessionModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center p-4 z-50" style="display: none;">
+        <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full">
+            <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                <h2 id="modalTitle" class="text-xl font-semibold text-gray-900">Add New Session</h2>
+                <button onclick="closeModal()" class="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="p-6">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Session Name <span class="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="sessionName"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="e.g., Fall 2025, Semester 1"
+                        />
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                Start Date <span class="text-red-500">*</span>
+                            </label>
+                            <input
+                                type="date"
+                                id="startDate"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            />
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                End Date <span class="text-red-500">*</span>
+                            </label>
+                            <input
+                                type="date"
+                                id="endDate"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            />
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Description
+                        </label>
+                        <textarea
+                            id="description"
+                            rows="3"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Brief description of this session"
+                        ></textarea>
+                    </div>
+
+                    <div class="flex items-center">
+                        <input
+                            type="checkbox"
+                            id="isActive"
+                            class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                        />
+                        <label for="isActive" class="ml-2 text-sm text-gray-700">
+                            Set as active session
+                        </label>
+                    </div>
+
+                    <div id="activeWarning" class="bg-orange-50 border border-orange-200 rounded-lg p-3" style="display: none;">
+                        <p class="text-sm text-orange-700">
+                            Setting this as active will automatically deactivate the current active session.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-end space-x-3 mt-6 pt-6 border-t border-gray-200">
+                    <button
+                        onclick="closeModal()"
+                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        onclick="handleSubmit()"
+                        id="submitBtn"
+                        class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+                    >
+                        Create Session
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let sessions = [
+            {
+                id: 1,
+                name: 'Fall 2025',
+                startDate: '2025-09-01',
+                endDate: '2025-12-20',
+                status: 'active',
+                description: 'Fall semester for academic year 2025-2026',
+                units: 12,
+                progress: 45
+            },
+            {
+                id: 2,
+                name: 'Spring 2026',
+                startDate: '2026-01-15',
+                endDate: '2026-05-30',
+                status: 'upcoming',
+                description: 'Spring semester for academic year 2025-2026',
+                units: 12,
+                progress: 0
+            },
+            {
+                id: 3,
+                name: 'Summer 2025',
+                startDate: '2025-06-01',
+                endDate: '2025-08-15',
+                status: 'completed',
+                description: 'Summer session 2025',
+                units: 6,
+                progress: 100
+            }
+        ];
+
+        let editingSessionId = null;
+
+        // Format date
+        function formatDate(dateString, format = 'long') {
+            const date = new Date(dateString);
+            if (format === 'long') {
+                return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            }
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        // Get status badge classes
+        function getStatusBadge(status) {
+            const badges = {
+                active: 'bg-green-50 text-green-600 border-green-200',
+                upcoming: 'bg-orange-50 text-orange-600 border-orange-200',
+                completed: 'bg-gray-50 text-gray-600 border-gray-200'
+            };
+            return badges[status] || badges.upcoming;
+        }
+
+        // Get status icon
+        function getStatusIcon(status) {
+            if (status === 'active' || status === 'completed') {
+                return `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>`;
+            }
+            return `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>`;
+        }
+
+        // Render active session banner
+        function renderActiveBanner() {
+            const activeSession = sessions.find(s => s.status === 'active');
+            const banner = document.getElementById('activeBanner');
+
+            if (!activeSession) {
+                banner.style.display = 'none';
+                return;
+            }
+
+            banner.style.display = 'block';
+            banner.innerHTML = `
+                <div class="flex items-start justify-between">
+                    <div class="flex-1">
+                        <div class="flex items-center mb-2">
+                            <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center mr-3">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="flex items-center">
+                                    <h3 class="text-lg font-semibold text-gray-900">${activeSession.name}</h3>
+                                    <span class="ml-3 px-2 py-1 bg-green-500 text-white text-xs font-medium rounded-full">
+                                        Active Session
+                                    </span>
+                                </div>
+                                <p class="text-sm text-gray-600 mt-1">
+                                    ${formatDate(activeSession.startDate)} - ${formatDate(activeSession.endDate)}
+                                </p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-700 mb-3 ml-11">${activeSession.description}</p>
+                        <div class="ml-11">
+                            <div class="flex items-center justify-between text-xs text-gray-600 mb-1">
+                                <span>${activeSession.units} units enrolled</span>
+                                <span>${activeSession.progress}% complete</span>
+                            </div>
+                            <div class="w-full bg-green-200 rounded-full h-2">
+                                <div class="bg-green-500 h-2 rounded-full transition-all duration-300" style="width: ${activeSession.progress}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="openEditModal(${activeSession.id})" class="ml-4 p-2 text-gray-600 hover:bg-green-100 rounded-lg transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                        </svg>
+                    </button>
+                </div>
+            `;
+        }
+
+        // Render sessions list
+        function renderSessions() {
+            const container = document.getElementById('sessionsList');
+            
+            container.innerHTML = sessions.map(session => `
+                <div class="p-6 hover:bg-gray-50 transition-colors">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-start flex-1">
+                            <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-4 ${
+                                session.status === 'active' ? 'bg-green-100' :
+                                session.status === 'upcoming' ? 'bg-orange-100' : 'bg-gray-100'
+                            }">
+                                <svg class="w-5 h-5 ${
+                                    session.status === 'active' ? 'text-green-600' :
+                                    session.status === 'upcoming' ? 'text-orange-600' : 'text-gray-600'
+                                }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+
+                            <div class="flex-1">
+                                <div class="flex items-center mb-2">
+                                    <h3 class="text-lg font-semibold text-gray-900">${session.name}</h3>
+                                    <span class="ml-3 px-3 py-1 text-xs font-medium rounded-full border flex items-center ${getStatusBadge(session.status)}">
+                                        ${getStatusIcon(session.status)}
+                                        <span class="ml-1 capitalize">${session.status}</span>
+                                    </span>
+                                </div>
+
+                                <p class="text-sm text-gray-600 mb-3">${session.description}</p>
+
+                                <div class="flex items-center text-sm text-gray-500 space-x-6">
+                                    <div class="flex items-center">
+                                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
+                                        <span>${formatDate(session.startDate, 'short')} - ${formatDate(session.endDate, 'short')}</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-medium text-gray-700">${session.units}</span> units
+                                    </div>
+                                </div>
+
+                                ${session.status === 'active' ? `
+                                    <div class="mt-3">
+                                        <div class="flex items-center justify-between text-xs text-gray-600 mb-1">
+                                            <span>Session Progress</span>
+                                            <span>${session.progress}%</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-1.5">
+                                            <div class="bg-blue-500 h-1.5 rounded-full transition-all duration-300" style="width: ${session.progress}%"></div>
+                                        </div>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-2 ml-4">
+                            <button onclick="openEditModal(${session.id})" class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                </svg>
+                            </button>
+                            <button onclick="deleteSession(${session.id})" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" ${session.status === 'active' ? 'disabled opacity-50 cursor-not-allowed' : ''}>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Open add modal
+        function openAddModal() {
+            editingSessionId = null;
+            document.getElementById('modalTitle').textContent = 'Add New Session';
+            document.getElementById('submitBtn').textContent = 'Create Session';
+            document.getElementById('sessionName').value = '';
+            document.getElementById('startDate').value = '';
+            document.getElementById('endDate').value = '';
+            document.getElementById('description').value = '';
+            document.getElementById('isActive').checked = false;
+            document.getElementById('activeWarning').style.display = 'none';
+            document.getElementById('sessionModal').style.display = 'flex';
+        }
+
+        // Open edit modal
+        function openEditModal(sessionId) {
+            const session = sessions.find(s => s.id === sessionId);
+            if (!session) return;
+
+            editingSessionId = sessionId;
+            document.getElementById('modalTitle').textContent = 'Edit Session';
+            document.getElementById('submitBtn').textContent = 'Update Session';
+            document.getElementById('sessionName').value = session.name;
+            document.getElementById('startDate').value = session.startDate;
+            document.getElementById('endDate').value = session.endDate;
+            document.getElementById('description').value = session.description;
+            document.getElementById('isActive').checked = session.status === 'active';
+            document.getElementById('activeWarning').style.display = session.status === 'active' ? 'none' : 'none';
+            document.getElementById('sessionModal').style.display = 'flex';
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('sessionModal').style.display = 'none';
+        }
+
+        // Handle submit
+        function handleSubmit() {
+            const name = document.getElementById('sessionName').value.trim();
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const description = document.getElementById('description').value.trim();
+            const isActive = document.getElementById('isActive').checked;
+
+            if (!name || !startDate || !endDate) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            if (editingSessionId) {
+                // Update existing session
+                sessions = sessions.map(s => {
+                    if (s.id === editingSessionId) {
+                        return { ...s, name, startDate, endDate, description, status: isActive ? 'active' : s.status };
+                    }
+                    // If setting a new active session, deactivate others
+                    if (isActive && s.status === 'active') {
+                        return { ...s, status: 'upcoming' };
+                    }
+                    return s;
+                });
+            } else {
+                // Add new session
+                const newSession = {
+                    id: Date.now(),
+                    name,
+                    startDate,
+                    endDate,
+                    description,
+                    status: isActive ? 'active' : 'upcoming',
+                    units: 12,
+                    progress: 0
+                };
+
+                // If setting as active, deactivate current active
+                if (isActive) {
+                    sessions = sessions.map(s => 
+                        s.status === 'active' ? { ...s, status: 'upcoming' } : s
+                    );
+                }
+
+                sessions.push(newSession);
+            }
+
+            closeModal();
+            render();
+        }
+
+        // Delete session
+        function deleteSession(sessionId) {
+            const session = sessions.find(s => s.id === sessionId);
+            if (session && session.status === 'active') {
+                alert('Cannot delete an active session');
+                return;
+            }
+
+            if (confirm('Are you sure you want to delete this session?')) {
+                sessions = sessions.filter(s => s.id !== sessionId);
+                render();
+            }
+        }
+
+        // Toggle active warning
+        document.getElementById('isActive').addEventListener('change', function() {
+            document.getElementById('activeWarning').style.display = this.checked ? 'block' : 'none';
+        });
+
+        // Render everything
+        function render() {
+            renderActiveBanner();
+            renderSessions();
+        }
+
+        // Initial render
+        render();
+    </script>
+</body>
+</html>

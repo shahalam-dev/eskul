@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Teacher Profile</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "system-ui", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-50 min-h-screen font-sans">
+    <div class="max-w-4xl mx-auto p-6">
+      <!-- Header -->
+      <div class="mb-8">
+        <div class="flex items-center mb-4">
+          <button
+            onclick="goBack()"
+            class="mr-4 p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <svg
+              class="w-5 h-5 text-gray-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              ></path>
+            </svg>
+          </button>
+          <div>
+            <h1 class="text-3xl font-semibold text-gray-900">
+              Create Teacher Profile
+            </h1>
+            <div class="w-12 h-1 bg-green-500 rounded-full mt-2"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Container -->
+      <form
+        id="teacherForm"
+        class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8"
+      >
+        <!-- Profile Photo Section -->
+        <div class="mb-8 pb-6 border-b border-gray-100">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">
+            Profile Photo
+          </h2>
+          <div class="flex items-center space-x-6">
+            <div class="relative">
+              <div
+                id="photoPreview"
+                class="w-24 h-24 rounded-full bg-green-100 flex items-center justify-center overflow-hidden border-2 border-green-200"
+              >
+                <svg
+                  class="w-12 h-12 text-green-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+            <div class="flex-1">
+              <input
+                type="file"
+                id="photoUpload"
+                accept="image/*"
+                class="hidden"
+                onchange="handlePhotoUpload(event)"
+              />
+              <button
+                type="button"
+                onclick="document.getElementById('photoUpload').click()"
+                class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+              >
+                Upload Photo
+              </button>
+              <p class="text-xs text-gray-500 mt-2">
+                JPG, PNG or GIF. Max size 2MB
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Personal Information -->
+        <div class="mb-8 pb-6 border-b border-gray-100">
+          <h2 class="text-xl font-semibold text-gray-900 mb-6">
+            Personal Information
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- First Name -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                First Name <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="firstName"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+              />
+            </div>
+
+            <!-- Last Name -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Last Name <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="lastName"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+              />
+            </div>
+
+            <!-- Email -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Email Address <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="email"
+                name="email"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+              />
+            </div>
+
+            <!-- Phone -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Phone Number <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="tel"
+                name="phone"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+              />
+            </div>
+
+            <!-- Date of Birth -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Date of Birth <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="date"
+                name="dob"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+              />
+            </div>
+
+            <!-- Gender -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Gender <span class="text-red-500">*</span>
+              </label>
+              <select
+                name="gender"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+              >
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+                <option value="prefer-not-to-say">Prefer not to say</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Professional Information -->
+        <div class="mb-8 pb-6 border-b border-gray-100">
+          <h2 class="text-xl font-semibold text-gray-900 mb-6">
+            Professional Information
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Employee ID -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Employee ID <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="employeeId"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+              />
+            </div>
+
+            <!-- Department -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Department <span class="text-red-500">*</span>
+              </label>
+              <select
+                name="department"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+              >
+                <option value="">Select Department</option>
+                <option value="mathematics">Mathematics</option>
+                <option value="science">Science</option>
+                <option value="languages">Languages</option>
+                <option value="arts">Arts</option>
+                <option value="history">History</option>
+                <option value="technology">Technology</option>
+                <option value="physical-ed">Physical Education</option>
+              </select>
+            </div>
+
+            <!-- Designation -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Designation <span class="text-red-500">*</span>
+              </label>
+              <select
+                name="designation"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+              >
+                <option value="">Select Designation</option>
+                <option value="teacher">Teacher</option>
+                <option value="senior-teacher">Senior Teacher</option>
+                <option value="head-of-department">Head of Department</option>
+                <option value="assistant-professor">Assistant Professor</option>
+                <option value="associate-professor">Associate Professor</option>
+                <option value="professor">Professor</option>
+              </select>
+            </div>
+
+            <!-- Highest Qualification -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Highest Qualification <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="qualification"
+                required
+                placeholder="e.g., M.Sc, Ph.D"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+              />
+            </div>
+
+            <!-- Years of Experience -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Years of Experience <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="number"
+                name="experience"
+                required
+                min="0"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+              />
+            </div>
+
+            <!-- Joining Date -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Joining Date <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="date"
+                name="joiningDate"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+              />
+            </div>
+          </div>
+
+          <!-- Subjects/Specializations -->
+          <div class="mt-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Subjects/Specializations <span class="text-red-500">*</span>
+            </label>
+            <div class="space-y-2">
+              <div id="subjectsList" class="flex flex-wrap gap-2 mb-2">
+                <!-- Selected subjects will appear here -->
+              </div>
+              <div class="flex gap-2">
+                <input
+                  type="text"
+                  id="subjectInput"
+                  placeholder="Enter subject and press Add"
+                  class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+                />
+                <button
+                  type="button"
+                  onclick="addSubject()"
+                  class="px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-md transition-colors"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="mb-8 pb-6 border-b border-gray-100">
+          <h2 class="text-xl font-semibold text-gray-900 mb-6">
+            Contact Information
+          </h2>
+
+          <!-- Address -->
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              Address <span class="text-red-500">*</span>
+            </label>
+            <textarea
+              name="address"
+              required
+              rows="3"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+            ></textarea>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- City -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                City <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="city"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+              />
+            </div>
+
+            <!-- State/Province -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                State/Province <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="state"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+              />
+            </div>
+
+            <!-- Postal Code -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Postal Code <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="postalCode"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+              />
+            </div>
+
+            <!-- Country -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Country <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="country"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+              />
+            </div>
+          </div>
+
+          <!-- Emergency Contact -->
+          <div class="mt-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">
+              Emergency Contact
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                  Contact Name <span class="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="emergencyName"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                  Contact Phone <span class="text-red-500">*</span>
+                </label>
+                <input
+                  type="tel"
+                  name="emergencyPhone"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                  Relationship <span class="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="emergencyRelationship"
+                  required
+                  placeholder="e.g., Spouse, Parent"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional Information -->
+        <div class="mb-8">
+          <h2 class="text-xl font-semibold text-gray-900 mb-6">
+            Additional Information
+          </h2>
+
+          <!-- Bio/About -->
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              Bio/About
+            </label>
+            <textarea
+              name="bio"
+              rows="4"
+              placeholder="Brief description about the teacher, teaching philosophy, interests, etc."
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+            ></textarea>
+          </div>
+
+          <!-- Additional Notes -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              Additional Notes
+            </label>
+            <textarea
+              name="notes"
+              rows="3"
+              placeholder="Any additional information or special notes"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div
+          class="flex flex-col sm:flex-row gap-4 justify-end pt-6 border-t border-gray-100"
+        >
+          <button
+            type="button"
+            onclick="resetForm()"
+            class="px-6 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+          >
+            Reset Form
+          </button>
+          <button
+            type="button"
+            onclick="saveDraft()"
+            class="px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded-md transition-colors"
+          >
+            Save as Draft
+          </button>
+          <button
+            type="submit"
+            class="px-6 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-md transition-colors"
+          >
+            Create Profile
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      const subjects = [];
+
+      function handlePhotoUpload(event) {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            const preview = document.getElementById("photoPreview");
+            preview.innerHTML = `<img src="${e.target.result}" alt="Profile photo" class="w-full h-full object-cover">`;
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+
+      function addSubject() {
+        const input = document.getElementById("subjectInput");
+        const subject = input.value.trim();
+
+        if (subject && !subjects.includes(subject)) {
+          subjects.push(subject);
+          updateSubjectsList();
+          input.value = "";
+        }
+      }
+
+      function removeSubject(subject) {
+        const index = subjects.indexOf(subject);
+        if (index > -1) {
+          subjects.splice(index, 1);
+          updateSubjectsList();
+        }
+      }
+
+      function updateSubjectsList() {
+        const container = document.getElementById("subjectsList");
+        container.innerHTML = subjects
+          .map(
+            (subject) => `
+                <span class="inline-flex items-center px-3 py-1 text-sm font-medium text-green-700 bg-green-50 rounded-full border border-green-200">
+                    ${subject}
+                    <button type="button" onclick="removeSubject('${subject}')" class="ml-2 text-green-600 hover:text-green-800">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </span>
+            `
+          )
+          .join("");
+      }
+
+      // Allow Enter key to add subjects
+      document
+        .getElementById("subjectInput")
+        .addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            addSubject();
+          }
+        });
+
+      function resetForm() {
+        if (
+          confirm(
+            "Are you sure you want to reset the form? All entered data will be lost."
+          )
+        ) {
+          document.getElementById("teacherForm").reset();
+          subjects.length = 0;
+          updateSubjectsList();
+          document.getElementById("photoPreview").innerHTML = `
+                    <svg class="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                `;
+        }
+      }
+
+      function saveDraft() {
+        const formData = new FormData(document.getElementById("teacherForm"));
+        const data = Object.fromEntries(formData);
+        data.subjects = subjects;
+
+        // Store in memory (in a real app, this would save to a database)
+        console.log("Draft saved:", data);
+
+        // Show success message
+        showNotification("Draft saved successfully!", "success");
+      }
+
+      function goBack() {
+        if (
+          confirm(
+            "Are you sure you want to go back? Any unsaved changes will be lost."
+          )
+        ) {
+          console.log("Navigate back to staff management");
+        }
+      }
+
+      function showNotification(message, type) {
+        const notification = document.createElement("div");
+        notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg ${
+          type === "success"
+            ? "bg-green-50 border border-green-200 text-green-700"
+            : "bg-red-50 border border-red-200 text-red-700"
+        } transition-all duration-300`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+          notification.remove();
+        }, 3000);
+      }
+
+      document
+        .getElementById("teacherForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          if (subjects.length === 0) {
+            showNotification(
+              "Please add at least one subject/specialization",
+              "error"
+            );
+            return;
+          }
+
+          const formData = new FormData(this);
+          const data = Object.fromEntries(formData);
+          data.subjects = subjects;
+
+          console.log("Form submitted:", data);
+          showNotification("Teacher profile created successfully!", "success");
+
+          // In a real app, this would send data to the server
+          setTimeout(() => {
+            resetForm();
+          }, 2000);
+        });
+    </script>
+  </body>
+</html>

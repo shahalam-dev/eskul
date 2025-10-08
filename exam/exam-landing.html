@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Hub</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+    <div class="max-w-6xl mx-auto p-6 md:p-8">
+        <!-- Header with Navigation -->
+        <div class="mb-8">
+            <div class="flex items-center mb-4">
+                <button onclick="goBack()" class="mr-4 p-2 hover:bg-white rounded-lg transition-colors border border-gray-200">
+                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+                <div class="flex-1">
+                    <!-- Breadcrumb -->
+                    <div class="flex items-center text-sm text-gray-500 mb-2">
+                        <span class="hover:text-gray-900 cursor-pointer">Dashboard</span>
+                        <svg class="w-4 h-4 mx-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                        <span class="text-gray-900 font-medium">Exam</span>
+                    </div>
+                    <h1 class="text-2xl font-semibold text-gray-900">Exam Hub</h1>
+                    <div class="w-12 h-1 bg-blue-500 rounded-full mt-2"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- Upcoming Exams -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <div class="flex items-center mb-2">
+                            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-1">Upcoming</p>
+                        <p class="text-3xl font-semibold text-gray-900">5</p>
+                    </div>
+                    <span class="px-2 py-1 bg-blue-50 text-blue-600 text-xs font-medium rounded-full">Next 7 days</span>
+                </div>
+            </div>
+
+            <!-- Completed Exams -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <div class="flex items-center mb-2">
+                            <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-1">Completed</p>
+                        <p class="text-3xl font-semibold text-gray-900">12</p>
+                    </div>
+                    <span class="px-2 py-1 bg-green-50 text-green-600 text-xs font-medium rounded-full">This semester</span>
+                </div>
+            </div>
+
+            <!-- Pending Results -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <div class="flex items-center mb-2">
+                            <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-1">Pending Results</p>
+                        <p class="text-3xl font-semibold text-gray-900">3</p>
+                    </div>
+                    <span class="px-2 py-1 bg-orange-50 text-orange-600 text-xs font-medium rounded-full">Awaiting</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming Exams Section -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 md:p-8 mb-8">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-semibold text-gray-900">Upcoming Exams</h2>
+                <button onclick="viewAllExams()" class="text-sm text-blue-600 font-medium hover:text-blue-700 transition-colors">
+                    View All →
+                </button>
+            </div>
+
+            <!-- Exam List -->
+            <div class="space-y-4">
+                <!-- Exam Item 1 -->
+                <div class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-blue-200 transition-all cursor-pointer group" onclick="viewExamDetails('Math')">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-purple-200 transition-colors">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4 flex-1">
+                        <div class="flex items-center">
+                            <h3 class="text-base font-semibold text-gray-900">Mid-Term Mathematics Exam</h3>
+                            <span class="ml-2 px-2 py-1 bg-blue-50 text-blue-600 text-xs font-medium rounded-full">Scheduled</span>
+                        </div>
+                        <div class="flex items-center mt-1 text-sm text-gray-500 space-x-4">
+                            <span class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                Oct 15, 2025
+                            </span>
+                            <span class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                09:00 AM - 11:00 AM
+                            </span>
+                            <span class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                50 Questions
+                            </span>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs text-gray-500">In 7 days</p>
+                    </div>
+                </div>
+
+                <!-- Exam Item 2 -->
+                <div class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-blue-200 transition-all cursor-pointer group" onclick="viewExamDetails('Physics')">
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-green-200 transition-colors">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4 flex-1">
+                        <div class="flex items-center">
+                            <h3 class="text-base font-semibold text-gray-900">Physics Unit Test</h3>
+                            <span class="ml-2 px-2 py-1 bg-orange-50 text-orange-600 text-xs font-medium rounded-full">Due Soon</span>
+                        </div>
+                        <div class="flex items-center mt-1 text-sm text-gray-500 space-x-4">
+                            <span class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                Oct 12, 2025
+                            </span>
+                            <span class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                10:00 AM - 11:30 AM
+                            </span>
+                            <span class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                35 Questions
+                            </span>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs text-orange-600 font-medium">In 4 days</p>
+                    </div>
+                </div>
+
+                <!-- Exam Item 3 -->
+                <div class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-blue-200 transition-all cursor-pointer group" onclick="viewExamDetails('Chemistry')">
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-green-200 transition-colors">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4 flex-1">
+                        <div class="flex items-center">
+                            <h3 class="text-base font-semibold text-gray-900">Chemistry Practical Exam</h3>
+                            <span class="ml-2 px-2 py-1 bg-blue-50 text-blue-600 text-xs font-medium rounded-full">Scheduled</span>
+                        </div>
+                        <div class="flex items-center mt-1 text-sm text-gray-500 space-x-4">
+                            <span class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                Oct 18, 2025
+                            </span>
+                            <span class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                02:00 PM - 04:00 PM
+                            </span>
+                            <span class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                Practical
+                            </span>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs text-gray-500">In 10 days</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Results Section -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 md:p-8 mb-8">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-semibold text-gray-900">Recent Results</h2>
+                <button onclick="viewAllResults()" class="text-sm text-blue-600 font-medium hover:text-blue-700 transition-colors">
+                    View All →
+                </button>
+            </div>
+
+            <!-- Results Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Result Item 1 -->
+                <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-all cursor-pointer" onclick="viewResult('History')">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-sm font-semibold text-gray-900">History Final Exam</h3>
+                                <p class="text-xs text-gray-500">Sept 28, 2025</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="px-2 py-1 bg-green-50 text-green-600 text-lg font-bold rounded">A</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-600">Score: <span class="font-semibold text-gray-900">92/100</span></span>
+                        <span class="px-2 py-1 bg-green-50 text-green-600 text-xs font-medium rounded-full">Passed</span>
+                    </div>
+                </div>
+
+                <!-- Result Item 2 -->
+                <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-all cursor-pointer" onclick="viewResult('English')">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-sm font-semibold text-gray-900">English Literature Test</h3>
+                                <p class="text-xs text-gray-500">Sept 25, 2025</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="px-2 py-1 bg-blue-50 text-blue-600 text-lg font-bold rounded">B</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-600">Score: <span class="font-semibold text-gray-900">78/100</span></span>
+                        <span class="px-2 py-1 bg-green-50 text-green-600 text-xs font-medium rounded-full">Passed</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <button onclick="viewSchedule()" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md hover:border-blue-200 transition-all text-left group">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-base font-semibold text-gray-900">View Schedule</h3>
+                        <p class="text-sm text-gray-500">Full exam calendar</p>
+                    </div>
+                </div>
+            </button>
+
+            <button onclick="practiceTests()" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md hover:border-green-200 transition-all text-left group">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition-colors">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-base font-semibold text-gray-900">Practice Tests</h3>
+                        <p class="text-sm text-gray-500">Test your knowledge</p>
+                    </div>
+                </div>
+            </button>
+
+            <button onclick="viewAllResults()" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md hover:border-purple-200 transition-all text-left group">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-200 transition-colors">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-base font-semibold text-gray-900">All Results</h3>
+                        <p class="text-sm text-gray-500">Performance history</p>
+                    </div>
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            console.log('Navigate back to dashboard');
+            alert('Navigate back to dashboard');
+        }
+
+        function viewAllExams() {
+            console.log('View all exams');
+            alert('Navigating to Exam Schedule page...');
+        }
+
+        function viewExamDetails(subject) {
+            console.log(`View exam details: ${subject}`);
+            alert(`Opening ${subject} exam details...`);
+        }
+
+        function viewAllResults() {
+            console.log('View all results');
+            alert('Navigating to Results History page...');
+        }
+
+        function viewResult(subject) {
+            console.log(`View result: ${subject}`);
+            alert(`Opening ${subject} exam result...`);
+        }
+
+        function viewSchedule() {
+            console.log('View schedule');
+            alert('Navigating to Exam Schedule/Calendar...');
+        }
+
+        function practiceTests() {
+            console.log('Practice tests');
+            alert('Navigating to Practice Tests...');
+        }
+
+        // Add subtle animation on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.bg-white');
+            elements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    el.style.transition = 'all 0.5s ease';
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, index * 50);
+            });
+        });
+
+        // Add click animation
+        document.querySelectorAll('button, .cursor-pointer').forEach(button => {
+            button.addEventListener('click', function() {
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 100);
+            });
+        });
+    </script>
+</body>
+</html>

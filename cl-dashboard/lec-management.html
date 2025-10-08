@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture Management - LMS</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+    <div class="max-w-7xl mx-auto p-6">
+        <!-- Page Header -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h1 class="text-3xl font-semibold text-gray-900">Lecture Management</h1>
+                    <div class="w-12 h-1 bg-blue-500 rounded-full mt-2"></div>
+                </div>
+                <button onclick="openModal()" class="px-6 py-3 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Create Lecture
+                </button>
+            </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                <div>
+                    <label class="text-sm font-medium text-gray-700 mb-1 block">Class</label>
+                    <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        <option>All Classes</option>
+                        <option>Class 10A</option>
+                        <option>Class 10B</option>
+                        <option>Class 11A</option>
+                        <option>Class 12A</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-700 mb-1 block">Section</label>
+                    <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        <option>All Sections</option>
+                        <option>Section A</option>
+                        <option>Section B</option>
+                        <option>Section C</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-700 mb-1 block">Subject</label>
+                    <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        <option>All Subjects</option>
+                        <option>Mathematics</option>
+                        <option>Science</option>
+                        <option>English</option>
+                        <option>History</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-700 mb-1 block">Day</label>
+                    <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        <option>All Days</option>
+                        <option>Monday</option>
+                        <option>Tuesday</option>
+                        <option>Wednesday</option>
+                        <option>Thursday</option>
+                        <option>Friday</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-700 mb-1 block">Staff</label>
+                    <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        <option>All Staff</option>
+                        <option>Dr. Smith</option>
+                        <option>Prof. Johnson</option>
+                        <option>Ms. Williams</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- View Toggle -->
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center space-x-2 bg-white rounded-lg border border-gray-200 shadow-sm p-1">
+                <button id="timetableViewBtn" onclick="switchView('timetable')" class="px-4 py-2 text-sm font-medium rounded-md bg-blue-100 text-blue-600 transition-colors">
+                    Timetable View
+                </button>
+                <button id="listViewBtn" onclick="switchView('list')" class="px-4 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-100 transition-colors">
+                    List View
+                </button>
+            </div>
+            <div class="text-sm text-gray-500">
+                <span class="font-medium text-gray-900">24</span> lectures scheduled this week
+            </div>
+        </div>
+
+        <!-- Timetable View -->
+        <div id="timetableView" class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-gray-50 border-b border-gray-200">
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-32">Time</th>
+                            <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Monday</th>
+                            <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Tuesday</th>
+                            <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Wednesday</th>
+                            <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Thursday</th>
+                            <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Friday</th>
+                        </tr>
+                    </thead>
+                    <tbody id="timetableBody">
+                        <!-- Time slots will be generated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- List View -->
+        <div id="listView" class="hidden space-y-3">
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-4 hover:shadow-md transition-shadow cursor-pointer" onclick="editLecture(1)">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-semibold text-gray-900">Advanced Mathematics</h3>
+                            <p class="text-sm text-gray-600">Class 10A - Section A</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-6">
+                        <div class="text-right">
+                            <p class="text-sm font-medium text-gray-900">Dr. Smith</p>
+                            <p class="text-xs text-gray-500">Room 301</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-medium text-gray-900">Monday</p>
+                            <p class="text-xs text-gray-500">09:00 - 10:00</p>
+                        </div>
+                        <span class="px-3 py-1 text-xs font-medium text-purple-600 bg-purple-50 rounded-full">Mathematics</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-4 hover:shadow-md transition-shadow cursor-pointer" onclick="editLecture(2)">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-semibold text-gray-900">Biology Lab</h3>
+                            <p class="text-sm text-gray-600">Class 11A - Section B</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-6">
+                        <div class="text-right">
+                            <p class="text-sm font-medium text-gray-900">Prof. Johnson</p>
+                            <p class="text-xs text-gray-500">Lab 2</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-medium text-gray-900">Tuesday</p>
+                            <p class="text-xs text-gray-500">10:00 - 11:30</p>
+                        </div>
+                        <span class="px-3 py-1 text-xs font-medium text-green-600 bg-green-50 rounded-full">Science</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-4 hover:shadow-md transition-shadow cursor-pointer" onclick="editLecture(3)">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-semibold text-gray-900">English Literature</h3>
+                            <p class="text-sm text-gray-600">Class 12A - Section A</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-6">
+                        <div class="text-right">
+                            <p class="text-sm font-medium text-gray-900">Ms. Williams</p>
+                            <p class="text-xs text-gray-500">Room 205</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-medium text-gray-900">Wednesday</p>
+                            <p class="text-xs text-gray-500">11:00 - 12:00</p>
+                        </div>
+                        <span class="px-3 py-1 text-xs font-medium text-pink-600 bg-pink-50 rounded-full">Languages</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create/Edit Lecture Modal -->
+    <div id="lectureModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <!-- Modal Header -->
+            <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-900">Create New Lecture</h2>
+                    <p class="text-sm text-gray-500 mt-1">Fill in the details to schedule a lecture</p>
+                </div>
+                <button onclick="closeModal()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Progress Indicator -->
+            <div class="px-6 py-4 border-b border-gray-200">
+                <div class="flex items-center justify-between">
+                    <div id="step1Indicator" class="flex items-center">
+                        <div class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-medium">1</div>
+                        <span class="ml-2 text-sm font-medium text-blue-600">Basic Info</span>
+                    </div>
+                    <div class="flex-1 h-1 bg-gray-200 mx-2"></div>
+                    <div id="step2Indicator" class="flex items-center">
+                        <div class="w-8 h-8 bg-gray-200 text-gray-500 rounded-full flex items-center justify-center text-sm font-medium">2</div>
+                        <span class="ml-2 text-sm font-medium text-gray-500">Class</span>
+                    </div>
+                    <div class="flex-1 h-1 bg-gray-200 mx-2"></div>
+                    <div id="step3Indicator" class="flex items-center">
+                        <div class="w-8 h-8 bg-gray-200 text-gray-500 rounded-full flex items-center justify-center text-sm font-medium">3</div>
+                        <span class="ml-2 text-sm font-medium text-gray-500">Schedule</span>
+                    </div>
+                    <div class="flex-1 h-1 bg-gray-200 mx-2"></div>
+                    <div id="step4Indicator" class="flex items-center">
+                        <div class="w-8 h-8 bg-gray-200 text-gray-500 rounded-full flex items-center justify-center text-sm font-medium">4</div>
+                        <span class="ml-2 text-sm font-medium text-gray-500">Assignment</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Content -->
+            <div class="px-6 py-6">
+                <!-- Step 1: Basic Info -->
+                <div id="step1" class="space-y-4">
+                    <div>
+                        <label class="text-sm font-medium text-gray-700 mb-1 block">Lecture Title<span class="text-red-500">*</span></label>
+                        <input type="text" placeholder="e.g., Introduction to Algebra" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-700 mb-1 block">Subject<span class="text-red-500">*</span></label>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                            <option>Select Subject</option>
+                            <option>Mathematics</option>
+                            <option>Science</option>
+                            <option>English</option>
+                            <option>History</option>
+                            <option>Geography</option>
+                            <option>Physics</option>
+                            <option>Chemistry</option>
+                            <option>Biology</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-700 mb-1 block">Description (Optional)</label>
+                        <textarea rows="3" placeholder="Add any additional details about this lecture..." class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"></textarea>
+                    </div>
+                </div>
+
+                <!-- Step 2: Class Assignment -->
+                <div id="step2" class="hidden space-y-4">
+                    <div>
+                        <label class="text-sm font-medium text-gray-700 mb-1 block">Class<span class="text-red-500">*</span></label>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                            <option>Select Class</option>
+                            <option>Class 10A</option>
+                            <option>Class 10B</option>
+                            <option>Class 11A</option>
+                            <option>Class 11B</option>
+                            <option>Class 12A</option>
+                            <option>Class 12B</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-700 mb-1 block">Section<span class="text-red-500">*</span></label>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                            <option>Select Section</option>
+                            <option>Section A</option>
+                            <option>Section B</option>
+                            <option>Section C</option>
+                        </select>
+                    </div>
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <div class="flex items-start">
+                            <svg class="w-5 h-5 text-blue-600 mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <div>
+                                <p class="text-sm font-medium text-blue-900">Class Information</p>
+                                <p class="text-xs text-blue-700 mt-1">Class 10A - Section A has 35 students enrolled</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Schedule -->
+                <div id="step3" class="hidden space-y-4">
+                    <div>
+                        <label class="text-sm font-medium text-gray-700 mb-1 block">Time Slot<span class="text-red-500">*</span></label>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                            <option>Select Time Slot</option>
+                            <option>09:00 - 10:00</option>
+                            <option>10:00 - 11:00</option>
+                            <option>11:00 - 12:00</option>
+                            <option>12:00 - 13:00</option>
+                            <option>14:00 - 15:00</option>
+                            <option>15:00 - 16:00</option>
+                            <option>16:00 - 17:00</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-700 mb-2 block">Select Days<span class="text-red-500">*</span></label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="flex items-center space-x-2 cursor-pointer">
+                                <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                <span class="text-sm text-gray-700">Monday</span>
+                            </label>
+                            <label class="flex items-center space-x-2 cursor-pointer">
+                                <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                <span class="text-sm text-gray-700">Tuesday</span>
+                            </label>
+                            <label class="flex items-center space-x-2 cursor-pointer">
+                                <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                <span class="text-sm text-gray-700">Wednesday</span>
+                            </label>
+                            <label class="flex items-center space-x-2 cursor-pointer">
+                                <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                <span class="text-sm text-gray-700">Thursday</span>
+                            </label>
+                            <label class="flex items-center space-x-2 cursor-pointer">
+                                <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                <span class="text-sm text-gray-700">Friday</span>
+                            </label>
+                            <label class="flex items-center space-x-2 cursor-pointer">
+                                <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                <span class="text-sm text-gray-700">Saturday</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Assignment -->
+                <div id="step4" class="hidden space-y-4">
+                    <div>
+                        <label class="text-sm font-medium text-gray-700 mb-1 block">Assign Teacher<span class="text-red-500">*</span></label>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                            <option>Select Teacher</option>
+                            <option>Dr. John Smith - Mathematics</option>
+                            <option>Prof. Sarah Johnson - Science</option>
+                            <option>Ms. Emily Williams - English</option>
+                            <option>Mr. Michael Brown - History</option>
+                            <option>Dr. Lisa Davis - Physics</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-700 mb-1 block">Room Number (Optional)</label>
+                        <input type="text" placeholder="e.g., Room 301 or Lab 2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-700 mb-1 block">Maximum Students (Optional)</label>
+                        <input type="number" placeholder="e.g., 35" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                    </div>
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                        <div class="flex items-start">
+                            <svg class="w-5 h-5 text-green-600 mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <div>
+                                <p class="text-sm font-medium text-green-900">No Conflicts Detected</p>
+                                <p class="text-xs text-green-700 mt-1">The selected teacher and room are available for this time slot</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="sticky bottom-0 bg-gray-50 border-t border-gray-200 px-6 py-4 flex items-center justify-between">
+                <button id="prevBtn" onclick="previousStep()" class="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors hidden">
+                    Previous
+                </button>
+                <div class="flex space-x-3 ml-auto">
+                    <button onclick="closeModal()" class="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+                        Cancel
+                    </button>
+                    <button id="nextBtn" onclick="nextStep()" class="px-6 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors">
+                        Next
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 4;
+
+        // Sample timetable data
+        const timeSlots = [
+            '09:00 - 10:00',
+            '10:00 - 11:00',
+            '11:00 - 12:00',
+            '12:00 - 13:00',
+            '14:00 - 15:00',
+            '15:00 - 16:00',
+            '16:00 - 17:00'
+        ];
+
+        const sampleLectures = {
+            'Monday-09:00 - 10:00': { subject: 'Mathematics', class: '10A-A', teacher: 'Dr. Smith', room: '301', color: 'purple' },
+            'Tuesday-10:00 - 11:00': { subject: 'Science', class: '11A-B', teacher: 'Prof. Johnson', room: 'Lab 2', color: 'green' },
+            'Wednesday-11:00 - 12:00': { subject: 'English', class: '12A-A', teacher: 'Ms. Williams', room: '205', color: 'pink' },
+            'Thursday-09:00 - 10:00': { subject: 'History', class: '10A-B', teacher: 'Mr. Brown', room: '102', color: 'indigo' },
+            'Friday-14:00 - 15:00': { subject: 'Physics', class: '11A-A', teacher: 'Dr. Davis', room: '304', color: 'teal' },
+        };
+
+        const colorClasses = {
+            'purple': 'bg-purple-50 border-l-4 border-purple-500',
+            'green': 'bg-green-50 border-l-4 border-green-500',
+            'pink': 'bg-pink-50 border-l-4 border-pink-500',
+            'indigo': 'bg-indigo-50 border-l-4 border-indigo-500',
+            'teal': 'bg-teal-50 border-l-4 border-teal-500',
+            'orange': 'bg-orange-50 border-l-4 border-orange-500'
+        };
+
+        // Generate timetable
+        function generateTimetable() {
+            const tbody = document.getElementById('timetableBody');
+            const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+
+            timeSlots.forEach(slot => {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-gray-100';
+
+                // Time column
+                const timeCell = document.createElement('td');
+                timeCell.className = 'px-4 py-3 text-sm font-medium text-gray-700 border-r border-gray-100';
+                timeCell.textContent = slot;
+                row.appendChild(timeCell);
+
+                // Day columns
+                days.forEach(day => {
+                    const cell = document.createElement('td');
+                    cell.className = 'px-2 py-2';
+
+                    const key = `${day}-${slot}`;
+                    const lecture = sampleLectures[key];
+
+                    if (lecture) {
+                        cell.innerHTML = `
+                            <div class="p-3 rounded-lg ${colorClasses[lecture.color]} cursor-pointer hover:shadow-md transition-shadow" onclick="editLecture('${key}')">
+                                <p class="text-sm font-semibold text-gray-900">${lecture.subject}</p>
+                                <p class="text-xs text-gray-600 mt-1">${lecture.class}</p>
+                                <p class="text-xs text-gray-500 mt-1">${lecture.teacher}</p>
+                                <p class="text-xs text-gray-400">${lecture.room}</p>
+                            </div>
+                        `;
+                    } else {
+                        cell.innerHTML = `
+                            <div class="p-3 border-2 border-dashed border-gray-200 rounded-lg h-24 flex items-center justify-center cursor-pointer hover:border-blue-300 hover:bg-blue-50 transition-colors" onclick="quickAddLecture('${day}', '${slot}')">
+                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                </svg>
+                            </div>
+                        `;
+                    }
+
+                    row.appendChild(cell);
+                });
+
+                tbody.appendChild(row);
+            });
+        }
+
+        // View switching
+        function switchView(view) {
+            const timetableView = document.getElementById('timetableView');
+            const listView = document.getElementById('listView');
+            const timetableBtn = document.getElementById('timetableViewBtn');
+            const listBtn = document.getElementById('listViewBtn');
+
+            if (view === 'timetable') {
+                timetableView.classList.remove('hidden');
+                listView.classList.add('hidden');
+                timetableBtn.classList.add('bg-blue-100', 'text-blue-600');
+                timetableBtn.classList.remove('text-gray-600', 'hover:bg-gray-100');
+                listBtn.classList.remove('bg-blue-100', 'text-blue-600');
+                listBtn.classList.add('text-gray-600', 'hover:bg-gray-100');
+            } else {
+                timetableView.classList.add('hidden');
+                listView.classList.remove('hidden');
+                listBtn.classList.add('bg-blue-100', 'text-blue-600');
+                listBtn.classList.remove('text-gray-600', 'hover:bg-gray-100');
+                timetableBtn.classList.remove('bg-blue-100', 'text-blue-600');
+                timetableBtn.classList.add('text-gray-600', 'hover:bg-gray-100');
+            }
+        }
+
+        // Modal functions
+        function openModal() {
+            document.getElementById('lectureModal').classList.remove('hidden');
+            currentStep = 1;
+            updateStepDisplay();
+        }
+
+        function closeModal() {
+            document.getElementById('lectureModal').classList.add('hidden');
+        }
+
+        function nextStep() {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                updateStepDisplay();
+            } else {
+                // Submit form
+                alert('Lecture created successfully!');
+                closeModal();
+            }
+        }
+
+        function previousStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateStepDisplay();
+            }
+        }
+
+        function updateStepDisplay() {
+            // Hide all steps
+            for (let i = 1; i <= totalSteps; i++) {
+                document.getElementById(`step${i}`).classList.add('hidden');
+            }
+
+            // Show current step
+            document.getElementById(`step${currentStep}`).classList.remove('hidden');
+
+            // Update indicators
+            for (let i = 1; i <= totalSteps; i++) {
+                const indicator = document.getElementById(`step${i}Indicator`);
+                const circle = indicator.querySelector('div');
+                const text = indicator.querySelector('span');
+
+                if (i < currentStep) {
+                    circle.className = 'w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-medium';
+                    text.className = 'ml-2 text-sm font-medium text-green-600';
+                } else if (i === currentStep) {
+                    circle.className = 'w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-medium';
+                    text.className = 'ml-2 text-sm font-medium text-blue-600';
+                } else {
+                    circle.className = 'w-8 h-8 bg-gray-200 text-gray-500 rounded-full flex items-center justify-center text-sm font-medium';
+                    text.className = 'ml-2 text-sm font-medium text-gray-500';
+                }
+            }
+
+            // Update buttons
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            if (currentStep === 1) {
+                prevBtn.classList.add('hidden');
+            } else {
+                prevBtn.classList.remove('hidden');
+            }
+
+            if (currentStep === totalSteps) {
+                nextBtn.textContent = 'Create Lecture';
+            } else {
+                nextBtn.textContent = 'Next';
+            }
+        }
+
+        function quickAddLecture(day, slot) {
+            openModal();
+            console.log(`Quick add lecture for ${day} at ${slot}`);
+        }
+
+        function editLecture(id) {
+            openModal();
+            console.log(`Editing lecture: ${id}`);
+        }
+
+        // Initialize
+        generateTimetable();
+    </script>
+</body>
+</html>

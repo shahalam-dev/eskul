@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subject Management - Admin</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+    <!-- Main Container -->
+    <div class="max-w-7xl mx-auto p-6">
+        <!-- Page Header -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center">
+                    <button onclick="goBack()" class="mr-4 p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    <div>
+                        <h1 class="text-3xl font-semibold text-gray-900">Subject Management</h1>
+                        <p class="text-sm text-gray-500 mt-1">Manage all subjects taught in the institution</p>
+                    </div>
+                </div>
+                <button onclick="openAddSubjectModal()" class="px-6 py-3 text-base font-medium bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors shadow-sm">
+                    <span class="flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        Add Subject
+                    </span>
+                </button>
+            </div>
+            <div class="w-12 h-1 bg-purple-500 rounded-full"></div>
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="mb-6">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-2">
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="filterByCategory('all')" class="category-tab active px-4 py-2 text-sm font-medium rounded-lg transition-colors">
+                        All Subjects
+                    </button>
+                    <button onclick="filterByCategory('mathematics')" class="category-tab px-4 py-2 text-sm font-medium rounded-lg transition-colors">
+                        Mathematics
+                    </button>
+                    <button onclick="filterByCategory('science')" class="category-tab px-4 py-2 text-sm font-medium rounded-lg transition-colors">
+                        Science
+                    </button>
+                    <button onclick="filterByCategory('languages')" class="category-tab px-4 py-2 text-sm font-medium rounded-lg transition-colors">
+                        Languages
+                    </button>
+                    <button onclick="filterByCategory('arts')" class="category-tab px-4 py-2 text-sm font-medium rounded-lg transition-colors">
+                        Arts
+                    </button>
+                    <button onclick="filterByCategory('others')" class="category-tab px-4 py-2 text-sm font-medium rounded-lg transition-colors">
+                        Others
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subject Cards Grid -->
+        <div id="subjectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Subject cards will be dynamically populated -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden text-center py-12">
+            <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                </svg>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">No subjects found</h3>
+            <p class="text-sm text-gray-500 mb-4">Get started by adding your first subject</p>
+            <button onclick="openAddSubjectModal()" class="px-4 py-2 text-sm font-medium bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors">
+                Add Subject
+            </button>
+        </div>
+    </div>
+
+    <!-- Add/Edit Subject Modal -->
+    <div id="subjectModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <!-- Modal Header -->
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex items-center justify-between">
+                    <h2 id="modalTitle" class="text-2xl font-semibold text-gray-900">Add New Subject</h2>
+                    <button onclick="closeModal()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                        <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Body -->
+            <form id="subjectForm" class="p-6 space-y-6">
+                <!-- Subject Name -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Subject Name <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" id="subjectName" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                           placeholder="e.g., Advanced Calculus">
+                </div>
+
+                <!-- Subject Code -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Subject Code <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" id="subjectCode" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                           placeholder="e.g., MATH-301">
+                </div>
+
+                <!-- Category -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Category <span class="text-red-500">*</span>
+                    </label>
+                    <select id="subjectCategory" required 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                        <option value="">Select a category</option>
+                        <option value="mathematics">Mathematics</option>
+                        <option value="science">Science</option>
+                        <option value="languages">Languages</option>
+                        <option value="arts">Arts</option>
+                        <option value="history">History</option>
+                        <option value="technology">Technology</option>
+                        <option value="physical-ed">Physical Education</option>
+                        <option value="general">General</option>
+                    </select>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Description
+                    </label>
+                    <textarea id="subjectDescription" rows="4" 
+                              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                              placeholder="Brief description of the subject..."></textarea>
+                </div>
+
+                <!-- Subject Color -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-3">
+                        Subject Color
+                    </label>
+                    <div class="grid grid-cols-4 gap-3">
+                        <button type="button" onclick="selectColor('purple')" class="color-option h-12 rounded-lg border-2 border-transparent hover:border-purple-300 transition-all bg-purple-500" data-color="purple"></button>
+                        <button type="button" onclick="selectColor('green')" class="color-option h-12 rounded-lg border-2 border-transparent hover:border-green-300 transition-all bg-green-500" data-color="green"></button>
+                        <button type="button" onclick="selectColor('pink')" class="color-option h-12 rounded-lg border-2 border-transparent hover:border-pink-300 transition-all bg-pink-500" data-color="pink"></button>
+                        <button type="button" onclick="selectColor('orange')" class="color-option h-12 rounded-lg border-2 border-transparent hover:border-orange-300 transition-all bg-orange-500" data-color="orange"></button>
+                        <button type="button" onclick="selectColor('indigo')" class="color-option h-12 rounded-lg border-2 border-transparent hover:border-indigo-300 transition-all bg-indigo-500" data-color="indigo"></button>
+                        <button type="button" onclick="selectColor('teal')" class="color-option h-12 rounded-lg border-2 border-transparent hover:border-teal-300 transition-all bg-teal-500" data-color="teal"></button>
+                        <button type="button" onclick="selectColor('red')" class="color-option h-12 rounded-lg border-2 border-transparent hover:border-red-300 transition-all bg-red-500" data-color="red"></button>
+                        <button type="button" onclick="selectColor('gray')" class="color-option h-12 rounded-lg border-2 border-transparent hover:border-gray-300 transition-all bg-gray-500" data-color="gray"></button>
+                    </div>
+                    <input type="hidden" id="selectedColor" value="purple">
+                </div>
+
+                <!-- Form Actions -->
+                <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
+                    <button type="button" onclick="closeModal()" 
+                            class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit" 
+                            class="px-6 py-2 text-sm font-medium bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors shadow-sm">
+                        Save Subject
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Sample subjects data
+        let subjects = [
+            {
+                id: 1,
+                name: 'Advanced Calculus',
+                code: 'MATH-301',
+                category: 'mathematics',
+                description: 'Study of limits, derivatives, integrals, and infinite series',
+                color: 'purple'
+            },
+            {
+                id: 2,
+                name: 'Organic Chemistry',
+                code: 'SCI-202',
+                category: 'science',
+                description: 'Chemistry of carbon compounds and their reactions',
+                color: 'green'
+            },
+            {
+                id: 3,
+                name: 'English Literature',
+                code: 'ENG-101',
+                category: 'languages',
+                description: 'Analysis of classic and contemporary literary works',
+                color: 'pink'
+            },
+            {
+                id: 4,
+                name: 'Digital Art & Design',
+                code: 'ART-105',
+                category: 'arts',
+                description: 'Introduction to digital art creation and design principles',
+                color: 'orange'
+            },
+            {
+                id: 5,
+                name: 'World History',
+                code: 'HIST-201',
+                category: 'history',
+                description: 'Comprehensive study of world civilizations and their development',
+                color: 'indigo'
+            },
+            {
+                id: 6,
+                name: 'Computer Science',
+                code: 'CS-101',
+                category: 'technology',
+                description: 'Introduction to programming and computational thinking',
+                color: 'teal'
+            },
+            {
+                id: 7,
+                name: 'Physical Education',
+                code: 'PE-100',
+                category: 'physical-ed',
+                description: 'Fitness, health, and sports activities',
+                color: 'red'
+            },
+            {
+                id: 8,
+                name: 'Geometry',
+                code: 'MATH-201',
+                category: 'mathematics',
+                description: 'Study of shapes, sizes, and spatial relationships',
+                color: 'purple'
+            }
+        ];
+
+        let currentFilter = 'all';
+        let editingSubjectId = null;
+        let selectedColor = 'purple';
+
+        // Category icons
+        const categoryIcons = {
+            mathematics: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>',
+            science: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>',
+            languages: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>',
+            arts: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>',
+            history: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>',
+            technology: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>',
+            'physical-ed': '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>',
+            general: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>'
+        };
+
+        // Color mappings
+        const colorClasses = {
+            purple: { bg: 'bg-purple-100', icon: 'text-purple-600', badge: 'bg-purple-500', hover: 'hover:border-purple-200' },
+            green: { bg: 'bg-green-100', icon: 'text-green-600', badge: 'bg-green-500', hover: 'hover:border-green-200' },
+            pink: { bg: 'bg-pink-100', icon: 'text-pink-600', badge: 'bg-pink-500', hover: 'hover:border-pink-200' },
+            orange: { bg: 'bg-orange-100', icon: 'text-orange-600', badge: 'bg-orange-500', hover: 'hover:border-orange-200' },
+            indigo: { bg: 'bg-indigo-100', icon: 'text-indigo-600', badge: 'bg-indigo-500', hover: 'hover:border-indigo-200' },
+            teal: { bg: 'bg-teal-100', icon: 'text-teal-600', badge: 'bg-teal-500', hover: 'hover:border-teal-200' },
+            red: { bg: 'bg-red-100', icon: 'text-red-600', badge: 'bg-red-500', hover: 'hover:border-red-200' },
+            gray: { bg: 'bg-gray-100', icon: 'text-gray-600', badge: 'bg-gray-500', hover: 'hover:border-gray-200' }
+        };
+
+        function renderSubjects() {
+            const grid = document.getElementById('subjectsGrid');
+            const emptyState = document.getElementById('emptyState');
+            
+            let filteredSubjects = subjects;
+            if (currentFilter !== 'all') {
+                filteredSubjects = subjects.filter(s => s.category === currentFilter);
+            }
+
+            if (filteredSubjects.length === 0) {
+                grid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            grid.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+
+            grid.innerHTML = filteredSubjects.map(subject => {
+                const colors = colorClasses[subject.color];
+                const icon = categoryIcons[subject.category] || categoryIcons.general;
+                
+                return `
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 ${colors.hover} transition-all duration-200 group">
+                        <!-- Subject Header -->
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="w-12 h-12 ${colors.bg} rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <svg class="w-6 h-6 ${colors.icon}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    ${icon}
+                                </svg>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="editSubject(${subject.id})" class="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                    </svg>
+                                </button>
+                                <button onclick="deleteSubject(${subject.id})" class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Subject Info -->
+                        <div class="space-y-2">
+                            <h3 class="text-lg font-semibold text-gray-900">${subject.name}</h3>
+                            <div class="flex items-center gap-2">
+                                <span class="px-2 py-1 text-xs font-medium ${colors.badge} text-white rounded-full">${subject.code}</span>
+                                <span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full capitalize">${subject.category.replace('-', ' ')}</span>
+                            </div>
+                            <p class="text-sm text-gray-500 line-clamp-2 mt-3">${subject.description || 'No description available'}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterByCategory(category) {
+            currentFilter = category;
+            
+            // Update active tab
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                tab.classList.remove('active', 'bg-purple-100', 'text-purple-700');
+                tab.classList.add('text-gray-600', 'hover:bg-gray-100');
+            });
+            
+            event.target.classList.add('active', 'bg-purple-100', 'text-purple-700');
+            event.target.classList.remove('text-gray-600', 'hover:bg-gray-100');
+            
+            renderSubjects();
+        }
+
+        function openAddSubjectModal() {
+            editingSubjectId = null;
+            document.getElementById('modalTitle').textContent = 'Add New Subject';
+            document.getElementById('subjectForm').reset();
+            selectedColor = 'purple';
+            updateColorSelection();
+            document.getElementById('subjectModal').classList.remove('hidden');
+        }
+
+        function editSubject(id) {
+            const subject = subjects.find(s => s.id === id);
+            if (!subject) return;
+
+            editingSubjectId = id;
+            document.getElementById('modalTitle').textContent = 'Edit Subject';
+            document.getElementById('subjectName').value = subject.name;
+            document.getElementById('subjectCode').value = subject.code;
+            document.getElementById('subjectCategory').value = subject.category;
+            document.getElementById('subjectDescription').value = subject.description;
+            selectedColor = subject.color;
+            updateColorSelection();
+            document.getElementById('subjectModal').classList.remove('hidden');
+        }
+
+        function deleteSubject(id) {
+            if (confirm('Are you sure you want to delete this subject? This action cannot be undone.')) {
+                subjects = subjects.filter(s => s.id !== id);
+                renderSubjects();
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('subjectModal').classList.add('hidden');
+            document.getElementById('subjectForm').reset();
+            editingSubjectId = null;
+        }
+
+        function selectColor(color) {
+            selectedColor = color;
+            document.getElementById('selectedColor').value = color;
+            updateColorSelection();
+        }
+
+        function updateColorSelection() {
+            document.querySelectorAll('.color-option').forEach(btn => {
+                const color = btn.getAttribute('data-color');
+                if (color === selectedColor) {
+                    btn.classList.add('ring-4', 'ring-offset-2');
+                    btn.classList.add(`ring-${color}-300`);
+                } else {
+                    btn.classList.remove('ring-4', 'ring-offset-2');
+                    btn.className = btn.className.replace(/ring-\w+-300/g, '');
+                }
+            });
+        }
+
+        document.getElementById('subjectForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('subjectName').value,
+                code: document.getElementById('subjectCode').value,
+                category: document.getElementById('subjectCategory').value,
+                description: document.getElementById('subjectDescription').value,
+                color: selectedColor
+            };
+
+            if (editingSubjectId) {
+                // Update existing subject
+                const index = subjects.findIndex(s => s.id === editingSubjectId);
+                subjects[index] = { ...subjects[index], ...formData };
+            } else {
+                // Add new subject
+                const newSubject = {
+                    id: Math.max(...subjects.map(s => s.id)) + 1,
+                    ...formData
+                };
+                subjects.push(newSubject);
+            }
+
+            closeModal();
+            renderSubjects();
+        });
+
+        function goBack() {
+            console.log('Navigate back to admin dashboard');
+            alert('Navigate back to admin dashboard');
+        }
+
+        // Initialize
+        renderSubjects();
+        
+        // Set initial active tab
+        document.querySelector('.category-tab.active').classList.add('bg-purple-100', 'text-purple-700');
+    </script>
+</body>
+</html>

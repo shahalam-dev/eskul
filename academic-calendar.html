@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Calendar</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+    <div class="max-w-4xl mx-auto p-6">
+        <!-- Header -->
+        <div class="mb-8">
+            <div class="flex items-center mb-4">
+                <!-- <button onclick="goBack()" class="mr-4 p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button> -->
+                <div>
+                    <h1 class="text-3xl font-semibold text-gray-900">Academic Calendar</h1>
+                    <div class="flex items-center mt-2">
+                        <div class="w-12 h-1 bg-blue-500 rounded-full ml-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calendar Container -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+            <!-- Calendar Header -->
+            <div class="flex items-center justify-between mb-8">
+                <button onclick="changeMonth(-1)" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+                
+                <div class="text-center">
+                    <h2 id="monthYear" class="text-2xl font-semibold text-gray-900">September 2025</h2>
+                    <p class="text-sm text-gray-500 mt-1">Academic Year 2025-2026</p>
+                </div>
+                
+                <button onclick="changeMonth(1)" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Calendar Grid -->
+            <div class="grid grid-cols-7 gap-1">
+                <!-- Day Headers -->
+                <div class="p-4 text-center">
+                    <span class="text-sm font-medium text-gray-600">Mon</span>
+                </div>
+                <div class="p-4 text-center">
+                    <span class="text-sm font-medium text-gray-600">Tue</span>
+                </div>
+                <div class="p-4 text-center">
+                    <span class="text-sm font-medium text-gray-600">Wed</span>
+                </div>
+                <div class="p-4 text-center">
+                    <span class="text-sm font-medium text-gray-600">Thu</span>
+                </div>
+                <div class="p-4 text-center">
+                    <span class="text-sm font-medium text-gray-600">Fri</span>
+                </div>
+                <div class="p-4 text-center">
+                    <span class="text-sm font-medium text-gray-600">Sat</span>
+                </div>
+                <div class="p-4 text-center">
+                    <span class="text-sm font-medium text-gray-600">Sun</span>
+                </div>
+
+                <!-- Calendar Days -->
+                <div id="calendarDays" class="contents">
+                    <!-- Days will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Calendar Legend -->
+            <div class="mt-8 pt-6 border-t border-gray-100">
+                <div class="flex flex-wrap gap-4 justify-center">
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+                        <span class="text-sm text-gray-600">Exam</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                        <span class="text-sm text-gray-600">Holiday</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 bg-purple-500 rounded-full mr-2"></div>
+                        <span class="text-sm text-gray-600">Assignment</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 bg-orange-500 rounded-full mr-2"></div>
+                        <span class="text-sm text-gray-600">Event</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentDate = new Date();
+        currentDate.setMonth(8); // September (0-indexed)
+        currentDate.setFullYear(2025);
+
+        // Sample events data
+        const events = {
+            '2025-09-05': { type: 'exam', title: 'Math Exam' },
+            '2025-09-15': { type: 'holiday', title: 'Independence Day' },
+            '2025-09-20': { type: 'assignment', title: 'Physics Assignment Due' },
+            '2025-09-25': { type: 'event', title: 'Science Fair' },
+            '2025-10-10': { type: 'exam', title: 'Chemistry Exam' },
+            '2025-10-31': { type: 'holiday', title: 'Halloween' },
+        };
+
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            
+            // Update month/year display
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'];
+            document.getElementById('monthYear').textContent = `${monthNames[month]} ${year}`;
+
+            // Get first day of month and number of days
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const startingDayOfWeek = (firstDay.getDay() + 6) % 7; // Adjust for Monday start
+            const numberOfDays = lastDay.getDate();
+
+            const calendarDays = document.getElementById('calendarDays');
+            calendarDays.innerHTML = '';
+
+            // Add empty cells for days before the first day of the month
+            for (let i = 0; i < startingDayOfWeek; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'h-16 p-2';
+                calendarDays.appendChild(emptyDay);
+            }
+
+            // Add days of the month
+            for (let day = 1; day <= numberOfDays; day++) {
+                const dayElement = document.createElement('div');
+                const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const isToday = new Date().toDateString() === new Date(year, month, day).toDateString();
+                const event = events[dateString];
+
+                dayElement.className = `h-16 p-2 border border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer rounded-lg relative ${
+                    isToday ? 'bg-blue-50 border-blue-200' : ''
+                }`;
+
+                let eventIndicator = '';
+                if (event) {
+                    const colors = {
+                        exam: 'bg-blue-500',
+                        holiday: 'bg-green-500',
+                        assignment: 'bg-purple-500',
+                        event: 'bg-orange-500'
+                    };
+                    eventIndicator = `<div class="absolute top-1 right-1 w-2 h-2 ${colors[event.type]} rounded-full"></div>`;
+                }
+
+                dayElement.innerHTML = `
+                    <div class="flex flex-col h-full">
+                        <span class="text-sm font-medium ${isToday ? 'text-blue-600' : 'text-gray-900'}">${day}</span>
+                        ${eventIndicator}
+                    </div>
+                `;
+
+                if (event) {
+                    dayElement.title = event.title;
+                }
+
+                dayElement.addEventListener('click', () => {
+                    if (event) {
+                        alert(`${event.title}\nDate: ${dateString}`);
+                    } else {
+                        console.log(`Clicked on ${dateString}`);
+                    }
+                });
+
+                calendarDays.appendChild(dayElement);
+            }
+        }
+
+        function changeMonth(direction) {
+            currentDate.setMonth(currentDate.getMonth() + direction);
+            renderCalendar();
+        }
+
+        function goBack() {
+            // In a real app, this would navigate back to the dashboard
+            console.log('Navigate back to dashboard');
+            alert('Navigate back to dashboard');
+        }
+
+        // Initialize calendar
+        renderCalendar();
+    </script>
+</body>
+</html>
